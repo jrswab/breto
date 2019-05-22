@@ -10,7 +10,11 @@ compiled binary written in go the problem halted.
 1. Download the source
 1. Edit as desired
 1. `go build`
-1. Set DWM to run the new binary.
+2. Execute the new binary
+
+### Optional:
+1. Set DWM to run the new binary automatically.
+2. Set keycombo to run the binary.
 
 ## Current Features:
 - Date & Time
