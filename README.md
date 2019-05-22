@@ -8,3 +8,6 @@ This may not be the script itself and something else but since moving to a compi
 1. Edit as desired
 1. `go build`
 1. Set DWM to run the new binary.
+
+## Current Features:
+- Date & Time
