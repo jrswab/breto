@@ -19,3 +19,5 @@ compiled binary written in go the problem halted.
 ## Current Features:
 ### Master Branch:
 - Date & Time
+- Weather via wttr.in
+- Total RAM not used
