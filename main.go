@@ -1,8 +1,8 @@
 package main
 
 import (
-	"./libs/ram"
-	"./libs/wttr"
+	"gitlab.com/jrswab/dwm-status/libs/ram"
+	"gitlab.com/jrswab/dwm-status/libs/wttr"
 	"os/exec"
 	"strings"
 	"time"
@@ -28,10 +28,11 @@ func main() {
 
 		// store desired items as strings
 		// delete or comment out a line to remove from status bar
-		cat := []string{" ",
+		cat := []string{"",
 			"RAM:", ramFree, "free", "|",
 			weather, "|",
-			hTime}
+			hTime,
+			""}
 
 		// concatinate all strings to one line for output
 		status := strings.Join(cat, " ")
