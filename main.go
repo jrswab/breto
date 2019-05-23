@@ -54,7 +54,7 @@ func main() {
 		cmd.Run()
 		time.Sleep(1 * time.Second)
 
-		// reset i to loop and reset wttr counter
+		// reset i to loop wttr updates
 		if i > 3600 {
 			i = 0
 		} else {
