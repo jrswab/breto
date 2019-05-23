@@ -7,23 +7,45 @@ import (
 	"time"
 )
 
+func getWttr() string {
+	wttrCmd := "curl -s 'wttr.in/?format=2'"
+	wttrRun, err := exec.Command("sh", "-c", wttrCmd).Output()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return strings.TrimSpace(string(wttrRun))
+}
+
+func getRam() string {
+	ramCmd := "free -h | gawk '/Mem:/ {print $4}'"
+	ramGib, err := exec.Command("sh", "-c", ramCmd).Output()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return strings.TrimSpace(string(ramGib))
+}
+
 func main() {
+	// initial run
 	i := 0
+	wttr := getWttr()
+	ramFree := getRam()
 
 	for i < 3700 {
 		hTime := time.Now().Format("Jan 02, 2006 15:04")
 
-		// get free Ram using Posix compliant shell command
-		ramCmd := "free -h | gawk '/Mem:/ {print $4}'"
-		ramGib, err := exec.Command("sh", "-c", ramCmd).Output()
-		if err != nil {
-			fmt.Println(err)
+		// get weather once per hour
+		if i == 3600 {
+			wttr = getWttr()
 		}
-		ramFree := strings.TrimSpace(string(ramGib))
+
+		// get free Ram every 3 seconds
+		if i%3 == 0 {
+			ramFree = getRam()
+		}
 
 		// storing desired items as strings
-		cat := []string{"RAM:", ramFree,
-			"free", "|", hTime}
+		cat := []string{"RAM:", ramFree, "free", "|", wttr, "|", hTime}
 
 		// concatinate all strings to one line for output
 		status := strings.Join(cat, " ")
@@ -32,6 +54,7 @@ func main() {
 		cmd.Run()
 		time.Sleep(1 * time.Second)
 
+		// reset i to loop and reset wttr counter
 		if i > 3600 {
 			i = 0
 		} else {
