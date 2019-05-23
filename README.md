@@ -15,6 +15,9 @@ compiled binary written in go the problem halted.
 ### Optional:
 1. Set DWM to run the new binary automatically.
 2. Set keycombo to run the binary.
+3. Add your area to the weather function
+   - Area Code: 'wttr.in/~00000?format=2' 
+   - City: 'wttr.in/~Paris?format=2'
 
 ## Current Features:
 ### Master Branch:
