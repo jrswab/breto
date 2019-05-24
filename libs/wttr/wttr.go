@@ -1,15 +1,19 @@
 package wttr
 
 import (
-	"os/exec"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 	"strings"
 )
 
 func Local() string {
-	wttrCmd := "curl -s 'wttr.in/?format=%t+%w'"
-	wttrRun, err := exec.Command("sh", "-c", wttrCmd).Output()
+	resp, err := http.Get("https://wttr.in/?format=%t+%w")
 	if err != nil {
-		return "wttr command returned error!"
+		fmt.Println(err)
 	}
-	return strings.TrimSpace(string(wttrRun))
+	defer resp.Body.Close()
+
+	bodyData, _ := ioutil.ReadAll(resp.Body)
+	return strings.TrimSpace(string(bodyData))
 }
