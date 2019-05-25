@@ -10,11 +10,12 @@ import (
 
 func main() {
 	// initial run
-	i := 0
+	var i uint16 = 0
 	weather := wttr.Local()
 	ramFree := ram.Free()
 
 	for i < 3700 {
+		// to add seconds use "Jan 02, 2006 15:04:05"
 		hTime := time.Now().Format("Jan 02, 2006 15:04")
 		// time delayed retrievals:
 		// get weather once per hour
@@ -28,11 +29,11 @@ func main() {
 
 		// store desired items as strings
 		// delete or comment out a line to remove from status bar
-		cat := []string{"",
+		cat := []string{"", // do not delete or comment out this line
 			"RAM:", ramFree, "free", "|",
 			weather, "|",
 			hTime,
-			""}
+			""} // do not delete or comment out this line
 
 		// concatinate all strings to one line for output
 		status := strings.Join(cat, " ")
