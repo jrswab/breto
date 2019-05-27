@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt" //"os/exec"
 	"gitlab.com/jrswab/dwm-status/libs/ram"
 	"gitlab.com/jrswab/dwm-status/libs/wttr"
+	"os/exec"
 	"strings"
 	"time"
 )
@@ -38,9 +38,8 @@ func main() {
 		// concatinate all strings to one line for output
 		status := strings.Join(cat, " ")
 
-		//cmd := exec.Command("xsetroot", "-name", status)
-		//cmd.Run()
-		fmt.Println(status)
+		cmd := exec.Command("xsetroot", "-name", status)
+		cmd.Run()
 
 		time.Sleep(1 * time.Second)
 

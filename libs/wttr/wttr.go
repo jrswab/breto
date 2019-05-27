@@ -7,8 +7,9 @@ import (
 )
 
 func Local() *string {
+	// get temp(%t) and wind direction/speed (%w)
 	// for more wttr options see https://wttr.in/:help
-	resp, err := http.Get("https://wttr.in/?format=%t+%w") // get temp and wind direction/speed
+	resp, err := http.Get("https://wttr.in/~15101?format=%t+%w")
 	if err != nil {
 		errMessage := "wttr connection issue"
 		return &errMessage
