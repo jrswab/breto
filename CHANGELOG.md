@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - May 27, 2019
+### Change
+- the passing of weather data to passing the memory adderess
+
 ## [1.2.1] - May 23, 2019
 ### Changed
 - status.go to main.go
