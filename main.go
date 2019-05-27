@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt" //"os/exec"
 	"gitlab.com/jrswab/dwm-status/libs/ram"
 	"gitlab.com/jrswab/dwm-status/libs/wttr"
-	"os/exec"
 	"strings"
 	"time"
 )
@@ -11,7 +11,7 @@ import (
 func main() {
 	// initial run
 	var i uint16 = 0
-	weather := wttr.Local()
+	weather := strings.TrimSpace(string(*wttr.Local()))
 	ramFree := ram.Free()
 
 	for i < 3700 {
@@ -20,7 +20,7 @@ func main() {
 		// time delayed retrievals:
 		// get weather once per hour
 		if i == 3600 {
-			weather = wttr.Local()
+			weather = strings.TrimSpace(string(*wttr.Local()))
 		}
 		// get free Ram every 3 seconds
 		if i%3 == 0 {
@@ -38,8 +38,9 @@ func main() {
 		// concatinate all strings to one line for output
 		status := strings.Join(cat, " ")
 
-		cmd := exec.Command("xsetroot", "-name", status)
-		cmd.Run()
+		//cmd := exec.Command("xsetroot", "-name", status)
+		//cmd.Run()
+		fmt.Println(status)
 
 		time.Sleep(1 * time.Second)
 
