@@ -8,8 +8,9 @@ import (
 
 func Local() *string {
 	// get temp(%t) and wind direction/speed (%w)
+	// for exact location add postal code - wttr.in/~15222?format...
 	// for more wttr options see https://wttr.in/:help
-	resp, err := http.Get("https://wttr.in/~15101?format=%t+%w")
+	resp, err := http.Get("https://wttr.in/?format=%t+%w")
 	if err != nil {
 		errMessage := "wttr connection issue"
 		return &errMessage
