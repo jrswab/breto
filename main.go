@@ -1,9 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"gitlab.com/jrswab/dwm-status/libs/ram"
 	"gitlab.com/jrswab/dwm-status/libs/wttr"
-	"os/exec"
+	//"os/exec"
 	"strings"
 	"time"
 )
@@ -27,16 +28,10 @@ func main() {
 			ramFree = ram.Free()
 		}
 
-		// store desired items as strings
-		// delete or comment out a line to remove from status bar
-		cat := []string{"", // do not delete or comment out this line
-			"RAM:", ramFree, "free", "|",
-			weather, "|",
-			hTime,
-			""} // do not delete or comment out this line
-
-		// concatinate all strings to one line for output
-		status := strings.Join(cat, " ")
+		// Change what is displayed by adding or removing variables (eg. weather).
+		// Change the text output by editing bewteen the `""`.
+		// Make sure to have the same number of `%s` as variables.
+		status := fmt.Sprintf(" RAM: %s free | %s | %s ", ramFree, weather, hTime)
 
 		cmd := exec.Command("xsetroot", "-name", status)
 		cmd.Run()
