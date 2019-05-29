@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gitlab.com/jrswab/dwm-status/libs/ram"
 	"gitlab.com/jrswab/dwm-status/libs/wttr"
-	//"os/exec"
+	"os/exec"
 	"strings"
 	"time"
 )
