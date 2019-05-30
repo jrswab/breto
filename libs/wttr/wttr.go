@@ -17,9 +17,9 @@ func Local(cWttr chan string) {
 	for range ticker.C {
 		passed = time.Since(start).Seconds() // total seconds passed
 		hour = math.Floor(math.Remainder(passed, 3600))
-		
+
 		if passed < 10 || hour == 0 {
-			resp, err := http.Get("https://wttr.in/?format=%t+%w") // for more wttr options see https://wttr.in/:help
+			resp, err := http.Get("https://wttr.in/?format=%t+%w") // for options see https://wttr.in/:help
 			if err != nil {
 				errMessage := "wttr connection issue"
 				cWttr <- errMessage
