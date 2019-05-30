@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.4] - May 29, 2019
+### Changed
+- Removed the counters from the bottom of main.go and cleaned up comments
+- Now each lib has a ticker and sends data to main ever 'n' seconds
+
+## [1.2.3] - May 28, 2019
+### Changed
+- Passing varibles and memory adderss for go routines
+
 ## [1.2.2] - May 27, 2019
 ### Change
 - the passing of weather data to passing the memory adderess
