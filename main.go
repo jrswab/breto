@@ -9,13 +9,8 @@ import (
 )
 
 func main() {
-	// initial run
-	var weather, ramFree string
-	hTime := time.Now().Format("Jan 02, 2006 15:04")
-	status := fmt.Sprintf(" %s ", hTime)
-
-	cmd := exec.Command("xsetroot", "-name", status)
-	cmd.Run() // run first execution without the go routines
+	var status, hTime, weather, ramFree string
+	var cmd *exec.Cmd
 
 	cWttr := make(chan string) // start weather data routine
 	go wttr.Local(cWttr)
