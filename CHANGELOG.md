@@ -6,13 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.4.0] - May 32, 2019
+## [0.4.0] - May 31, 2019
 ### Added
 - Go test for wttr and ram packages
 - Extra Go channels for errors
+- Instructions for using in Tmux
 
 ### Changed
 - location of package directories to top level
+- Project name from dwm-status to Go Status
 
 ## [0.3.4] - May 29, 2019
 ### Changed
