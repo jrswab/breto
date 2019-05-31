@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.3.5] - 
+## [0.3.5] - May 32, 2019
 ### Added
 - Go test for wttr and ram packages
 - Extra Go channels for errors
