@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func Free(cRam chan string) {
+func Free(cRam chan string, eRam chan error) {
 	var passed, tenSecs float64
 	start := time.Now() // set to determine seconds passed
 	ticker := time.NewTicker(time.Second)
@@ -23,7 +23,7 @@ func Free(cRam chan string) {
 
 			ramGib, err := exec.Command("sh", "-c", ramCmd).Output() // run and save the output
 			if err != nil {
-				cRam <- err.Error()
+				eRam <- err
 			}
 
 			ramFree = fmt.Sprintf("Ram: %s free | ",

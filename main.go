@@ -11,7 +11,7 @@ import (
 
 func main() {
 	var status, hTime, weather, ramFree string
-	var wttrErr error
+	var wttrErr, ramErr error
 	var cmd *exec.Cmd
 
 	cWttr := make(chan string) // start weather data routine
@@ -19,7 +19,8 @@ func main() {
 	go wttr.Local(cWttr, eWttr)
 
 	cRam := make(chan string) // start free ram data routine
-	go ram.Free(cRam)
+	eRam := make(chan error)
+	go ram.Free(cRam, eRam)
 
 	ticker := time.NewTicker(time.Second)
 	for range ticker.C {
@@ -30,6 +31,8 @@ func main() {
 		case wttrErr = <-eWttr:
 			log.Println(wttrErr.Error())
 		case ramFree = <-cRam:
+		case ramErr = <-eRam:
+			log.Println(ramErr.Error())
 		default:
 		}
 
