@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func Local(cWttr chan string) {
+func Local(cWttr chan string, eWttr chan error) {
 	var passed, hour float64
 	start := time.Now() // to determine seconds passed
 	ticker := time.NewTicker(time.Second)
@@ -19,15 +19,16 @@ func Local(cWttr chan string) {
 		hour = math.Floor(math.Remainder(passed, 3600))
 
 		if passed < 10 || hour == 0 {
-			resp, err := http.Get("https://wttr.in/?format=%t+%w") // for options see https://wttr.in/:help
+			// for options see https://wttr.in/:help
+			resp, err := http.Get("https://wttr.in/?format=%t+%w")
 			if err != nil {
-				errMessage := "wttr connection issue"
-				cWttr <- errMessage
+				eWttr <- err
 			}
 
 			bodyData, _ := ioutil.ReadAll(resp.Body)
+			// convert responce to string for go channel
 			weather := fmt.Sprintf("%s | ",
-				strings.TrimSpace(string(bodyData))) // convert responce to string for return
+				strings.TrimSpace(string(bodyData)))
 			cWttr <- weather
 		}
 	}
