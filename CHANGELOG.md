@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.5] - 
+### Added
+- Go test for wttr package
+- Another Go channel for wttr errors
+
+### Changed
+- location of package directories to top level
+
 ## [1.2.4] - May 29, 2019
 ### Changed
 - Removed the counters from the bottom of main.go and cleaned up comments
