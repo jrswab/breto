@@ -1,4 +1,4 @@
-package ram
+package blocks
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func Free(cRam chan string, eRam chan error) {
+func FreeRam(cRam chan string, eRam chan error) {
 	var passed, tenSecs float64
 	start := time.Now() // set to determine seconds passed
 	ticker := time.NewTicker(time.Second)

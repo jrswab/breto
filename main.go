@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-	"gitlab.com/jrswab/dwm-status/ram"
-	"gitlab.com/jrswab/dwm-status/wttr"
+	"gitlab.com/jrswab/go-status/blocks"
 	"log"
 	"os/exec"
 	"time"
@@ -16,11 +15,11 @@ func main() {
 
 	cWttr := make(chan string) // start weather data routine
 	eWttr := make(chan error)
-	go wttr.Local(cWttr, eWttr)
+	go blocks.Wttr(cWttr, eWttr)
 
 	cRam := make(chan string) // start free ram data routine
 	eRam := make(chan error)
-	go ram.Free(cRam, eRam)
+	go blocks.FreeRam(cRam, eRam)
 
 	ticker := time.NewTicker(time.Second)
 	for range ticker.C {

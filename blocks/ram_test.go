@@ -1,4 +1,4 @@
-package ram
+package blocks
 
 import (
 	"fmt"
@@ -7,15 +7,15 @@ import (
 
 // A basic test to make sure the function runs
 // and outputs data instead of an error
-func TestFree(t *testing.T) {
+func TestFreeRam(t *testing.T) {
 	cRam := make(chan string)
 	eRam := make(chan error)
 	var ram string
 	var runError error
 
-	go Free(cRam, eRam)
+	go FreeRam(cRam, eRam)
 
-	select { // grab first avalible channel
+	select {
 	case ram = <-cRam:
 	case runError = <-eRam:
 	}
