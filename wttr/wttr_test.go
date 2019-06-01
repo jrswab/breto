@@ -1,7 +1,6 @@
 package wttr
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -23,6 +22,7 @@ func TestLocal(t *testing.T) {
 
 	if wttrError != nil {
 		t.Error("Expected Weather Data got:", wttrError.Error())
+	} else if weather == " | " {
+		t.Error("Weather channel sent an empty string.")
 	}
-	fmt.Println(weather)
 }

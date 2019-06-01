@@ -29,6 +29,7 @@ func Local(cWttr chan string, eWttr chan error) {
 			// convert responce to string for go channel
 			weather := fmt.Sprintf("%s | ",
 				strings.TrimSpace(string(bodyData)))
+			resp.Body.Close()
 			cWttr <- weather
 		}
 	}
