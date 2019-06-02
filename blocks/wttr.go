@@ -26,6 +26,9 @@ func Wttr(cWttr chan string, eWttr chan error) {
 			}
 
 			bodyData, _ := ioutil.ReadAll(resp.Body)
+			if len(bodyData) > 100 { // wttr.in displays a webpage on server error
+				bodyData = "wttr.in overloaded" // display this on wttr.in server error
+			}
 			// convert responce to string for go channel
 			weather := fmt.Sprintf("%s | ",
 				strings.TrimSpace(string(bodyData)))
