@@ -1,25 +1,15 @@
 # Go Status Bar
 This is a script written with Go to display information. Currently tested with DWM and Tmux
 
-## Running in DWM:
-1. Download the source
-1. Edit as desired
-1. `go build`
-2. Execute the new binary
+## How To Use:
+1. Open main.go in a text editor
+2. Edit the last `status` variable to contain the blocks you wish to use
+3. Change the laste line to match your UI (eg, `ui.Dwm(status)`)
+4. Build the binary
+5. Edit your config file to use the new binary
 
-### DWM Optionals:
-1. Set DWM to run the new binary automatically.
-2. Set keycombo to run the binary.
-
-## Running in Tmux:
-1. Comment out or remove:
-   - `os/exec`
-   - `var cmd *exec.Cmd`
-   - `cmd = exec.Command("xsetroot", "-name", status)`
-   - `cmd.Run()`
-2. Add `fmt.Println(status)` to the end of `for range ticker.C`
-3. Save and run `go build` within the project directory
-4. Add to Tmux:
+### Tmux Extras:
+- Add to Tmux:
    - `set -g status-right "#($HOME/PATHTO/tmux-status)"`
 	   - if you have colors in this setting add the path at the end of the string
 	   - Be sure to use the correct path and name of the file you built with GO.
@@ -36,6 +26,11 @@ This is a script written with Go to display information. Currently tested with D
 
 ## Current Features:
 ### Master Branch:
+#### Blocks:
 - Date & Time
 - Weather via wttr.in
 - Total RAM not used
+#### User Interfaces:
+- DWM
+- I3WM
+- Tmux
