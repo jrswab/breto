@@ -1,4 +1,4 @@
-package wttr
+package blocks
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func Local(cWttr chan string, eWttr chan error) {
+func Wttr(cWttr chan string, eWttr chan error) {
 	var passed, hour float64
 	start := time.Now() // to determine seconds passed
 	ticker := time.NewTicker(time.Second)

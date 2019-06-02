@@ -2,29 +2,28 @@ package main
 
 import (
 	"fmt"
-	"gitlab.com/jrswab/dwm-status/ram"
-	"gitlab.com/jrswab/dwm-status/wttr"
+	"gitlab.com/jrswab/go-status/blocks" // if pulled from github change to github
+	"gitlab.com/jrswab/go-status/ui"     // if pulled from github change to github
 	"log"
-	"os/exec"
 	"time"
 )
 
 func main() {
 	var status, hTime, weather, ramFree string
 	var wttrErr, ramErr error
-	var cmd *exec.Cmd
 
 	cWttr := make(chan string) // start weather data routine
 	eWttr := make(chan error)
-	go wttr.Local(cWttr, eWttr)
+	go blocks.Wttr(cWttr, eWttr)
 
 	cRam := make(chan string) // start free ram data routine
 	eRam := make(chan error)
-	go ram.Free(cRam, eRam)
+	go blocks.FreeRam(cRam, eRam)
 
 	ticker := time.NewTicker(time.Second)
 	for range ticker.C {
-		hTime = time.Now().Format("Jan 02, 2006 15:04") // add seconds with "Jan 02, 2006 15:04:05"
+		// add seconds with "Jan 02, 2006 15:04:05"
+		hTime = time.Now().Format("Jan 02, 2006 15:04")
 
 		select { // update the go routine channels as they send data
 		case weather = <-cWttr:
@@ -36,8 +35,8 @@ func main() {
 		default:
 		}
 
-		status = fmt.Sprintf(" %s%s%s ", ramFree, weather, hTime) // Change by editing variables & `%s`
-		cmd = exec.Command("xsetroot", "-name", status)
-		cmd.Run()
+		// Change by editing variables & `%s`
+		status = fmt.Sprintf(" %s%s%s ", ramFree, weather, hTime)
+		ui.Dwm(status) // change this to the UI of choice
 	}
 }

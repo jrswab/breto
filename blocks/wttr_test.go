@@ -1,18 +1,19 @@
-package wttr
+package blocks
 
 import (
+	"fmt"
 	"testing"
 )
 
 // A basic test to make sure the function runs
 // and outputs data over instead of an error
-func TestLocal(t *testing.T) {
+func TestWttr(t *testing.T) {
 	cWttr := make(chan string)
 	eWttr := make(chan error)
 	var weather string
 	var wttrError error
 
-	go Local(cWttr, eWttr)
+	go Wttr(cWttr, eWttr)
 
 	// wait for weather or error
 	select {
@@ -25,4 +26,5 @@ func TestLocal(t *testing.T) {
 	} else if weather == " | " {
 		t.Error("Weather channel sent an empty string.")
 	}
+	fmt.Println(weather)
 }
