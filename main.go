@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"gitlab.com/jrswab/go-status/blocks"
-	"gitlab.com/jrswab/go-status/ui"
+	"gitlab.com/jrswab/go-status/blocks" // if pulled from github change to github
+	"gitlab.com/jrswab/go-status/ui"     // if pulled from github change to github
 	"log"
 	"time"
 )
