@@ -11,6 +11,8 @@ import (
 
 func Wttr(cWttr chan string, eWttr chan error) {
 	var passed, hour float64
+	var data string
+
 	start := time.Now() // to determine seconds passed
 	ticker := time.NewTicker(time.Second)
 
@@ -26,9 +28,13 @@ func Wttr(cWttr chan string, eWttr chan error) {
 			}
 
 			bodyData, _ := ioutil.ReadAll(resp.Body)
+			if len(bodyData) > 100 { // wttr.in displays a webpage on server error
+				data = "wttr.in overloaded" // display this on wttr.in server error
+			}
 			// convert responce to string for go channel
+			data = string(bodyData)
 			weather := fmt.Sprintf("%s | ",
-				strings.TrimSpace(string(bodyData)))
+				strings.TrimSpace(data))
 			resp.Body.Close()
 			cWttr <- weather
 		}
