@@ -11,6 +11,9 @@ import (
 func main() {
 	var status, hTime, weather, ramFree string
 	var wttrErr, ramErr error
+	volume, _ := blocks.VolumeIcon()
+	redshift, _ := blocks.RedshiftIcon()
+	dropbox, _ := blocks.DropboxIcon()
 
 	cWttr := make(chan string) // start weather data routine
 	eWttr := make(chan error)
@@ -35,8 +38,11 @@ func main() {
 		default:
 		}
 
+		volume, _ = blocks.VolumeIcon()
+		redshift, _ = blocks.RedshiftIcon()
+		dropbox, _ = blocks.DropboxIcon()
 		// Change by editing variables & `%s`
-		status = fmt.Sprintf(" %s%s%s ", ramFree, weather, hTime)
+		status = fmt.Sprintf(" %s%s%s %s%s%s ", ramFree, weather, hTime, dropbox, redshift, volume)
 		ui.Dwm(status) // change this to the UI of choice
 	}
 }
