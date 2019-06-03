@@ -59,3 +59,4 @@ If you have an easy way to display FontAwesome icons at the same scale as the te
 ## To-Do:
 1. Get a proper name
 2. Scale icons in tmux and i3wm
+3. Add /home GiB free `df -h | awk '/home/ {print $4}`
