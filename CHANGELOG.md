@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 - FontAwesome icons for DWM
 - Special error case for wttr.in for when it returns a webpage explaining a server error and not an http get error.
+- Volume percent number as a block
 
 ## [0.5.0] - June 2, 2019
 ### Added
