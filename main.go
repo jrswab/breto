@@ -9,11 +9,9 @@ import (
 )
 
 func main() {
-	var status, hTime, weather, ramFree string
+	// Other Blocks:
+	var status, hTime, weather, ramFree, rShift, dropbox, volIcon, volText string
 	var wttrErr, ramErr error
-	volume, _ := blocks.VolumeIcon()
-	redshift, _ := blocks.RedshiftIcon()
-	dropbox, _ := blocks.DropboxIcon()
 
 	cWttr := make(chan string) // start weather data routine
 	eWttr := make(chan error)
@@ -38,11 +36,15 @@ func main() {
 		default:
 		}
 
-		volume, _ = blocks.VolumeIcon()
-		redshift, _ = blocks.RedshiftIcon()
+		// Assign Icons & non Go Routine blocks every round
+		rShift, _ = blocks.RedshiftIcon()
 		dropbox, _ = blocks.DropboxIcon()
+		volText, _ = blocks.VolumeText()
+		volIcon, _ = blocks.VolumeIcon()
+
 		// Change by editing variables & `%s`
-		status = fmt.Sprintf(" %s%s%s %s%s%s ", ramFree, weather, hTime, dropbox, redshift, volume)
+		status = fmt.Sprintf(" %s%s%s%s%s %s%s",
+			ramFree, weather, volIcon, volText, hTime, dropbox, rShift)
 		ui.Dwm(status) // change this to the UI of choice
 	}
 }
