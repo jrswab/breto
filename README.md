@@ -40,7 +40,7 @@ If you have an easy way to display FontAwesome icons at the same scale as the te
 - `set -g status-right "#($HOME/PATHTO/tmux-status)"`
  - If you have colors in this setting add the path at the end of the string
  - Be sure to use the correct path and name of the file you built with GO.
- - Running `mv go-status ~/tmux-status` will allow you to use `"($HOME/tmux-status)" in your config.
+ - Running `mv go-status ~/tmux-status` will allow you to use `"($HOME/tmux-status)"` in your config.
 - `set -g status-right-length 53`
  - If you are not using all the custom packages this number can be lower
  - This also will vary based on screen size. 53 is the minimum that worke for all current blocks
@@ -60,3 +60,4 @@ If you have an easy way to display FontAwesome icons at the same scale as the te
 1. Get a proper name
 2. Scale icons in tmux and i3wm
 3. Add /home GiB free `df -h | awk '/home/ {print $4}`
+4. Add Volume % as non-icon block
