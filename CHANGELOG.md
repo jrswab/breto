@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - June 5, 2019
+### Added
+- Volume percent number (blocks/volume.go)
+- Remaining home directory storage (blocks/disk.go)
+- More icons
+
+### Changed
+- Block output formatting to allow for a less crammed Printf in main.go
+- Made blocks more modular for custom formatting
+
 ## [0.6.0] - June 3, 2019
 ## Added
 - FontAwesome icons for DWM
