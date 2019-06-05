@@ -10,8 +10,10 @@ import (
 
 func main() {
 	// Other Blocks:
-	var status, hTime, weather, ramFree, rShift, dropbox, volIcon, volText string
-	var wttrErr, ramErr error
+	var status, hTime string
+	var weather, ramFree, homeSpace string                                 // Go Routine Blocks
+	var tempIco, memIco, rShift, dropbox, volIcon, volText, homeDir string // Icon Blocks
+	var wttrErr, ramErr, homeErr error                                     // Go routine errors
 
 	cWttr := make(chan string) // start weather data routine
 	eWttr := make(chan error)
@@ -20,6 +22,10 @@ func main() {
 	cRam := make(chan string) // start free ram data routine
 	eRam := make(chan error)
 	go blocks.FreeRam(cRam, eRam)
+
+	cHomeDisk := make(chan string) // start free home dir space routine
+	eHomeDisk := make(chan error)
+	go blocks.HomeDisk(cHomeDisk, eHomeDisk)
 
 	ticker := time.NewTicker(time.Second)
 	for range ticker.C {
@@ -33,6 +39,9 @@ func main() {
 		case ramFree = <-cRam:
 		case ramErr = <-eRam:
 			log.Println(ramErr.Error())
+		case homeSpace = <-cHomeDisk:
+		case homeErr = <-eHomeDisk:
+			log.Println(homeErr.Error())
 		default:
 		}
 
@@ -41,10 +50,14 @@ func main() {
 		dropbox, _ = blocks.DropboxIcon()
 		volText, _ = blocks.VolumeText()
 		volIcon, _ = blocks.VolumeIcon()
+		homeDir = blocks.DirIcon()
+		memIco = blocks.MemIcon()
+		tempIco = blocks.TempIcon()
 
 		// Change by editing variables & `%s`
-		status = fmt.Sprintf(" %s%s%s%s%s %s%s",
-			ramFree, weather, volIcon, volText, hTime, dropbox, rShift)
+		status = fmt.Sprintf(" %s%s %s%s %s%s %s%s %s %s%s",
+			tempIco, weather, homeDir, homeSpace, memIco, ramFree, volIcon, volText,
+			hTime, dropbox, rShift)
 		ui.Dwm(status) // change this to the UI of choice
 	}
 }

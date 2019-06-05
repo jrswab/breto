@@ -16,7 +16,7 @@ func DropboxIcon() (string, error) {
 		return "", err
 	}
 	if string(runDbCmd) != "" {
-		return fmt.Sprintf("%s ", dbIcon), nil
+		return fmt.Sprintf("%s", dbIcon), nil
 	}
 	return "", nil
 }
@@ -30,16 +30,16 @@ func RedshiftIcon() (string, error) {
 		return "", err
 	}
 	if string(runRsCmd) != "" {
-		return fmt.Sprintf("%s ", rsIcon), nil
+		return fmt.Sprintf("%s", rsIcon), nil
 	}
 	return "", nil
 }
 
 func VolumeIcon() (string, error) {
-	volIconMute := ""
-	volIconLow := ""
-	volIconMid := ""
-	volIconHigh := ""
+	volIconMute := " "
+	volIconLow := " "
+	volIconMid := " "
+	volIconHigh := " "
 	volCmd := "amixer -D pulse sget Master | awk '/Front Right:/ {print $5}' | grep -o '[0-9]*'"
 	runVolCmd, err := exec.Command("sh", "-c", volCmd).Output()
 	volValue := binary.LittleEndian.Uint16(runVolCmd)
@@ -50,14 +50,26 @@ func VolumeIcon() (string, error) {
 
 	switch {
 	case volValue == 0:
-		return fmt.Sprintf("%s ", volIconMute), nil
+		return fmt.Sprintf("%s", volIconMute), nil
 	case volValue < 50:
-		return fmt.Sprintf("%s ", volIconLow), nil
+		return fmt.Sprintf("%s", volIconLow), nil
 	case volValue >= 50 && volValue <= 74:
-		return fmt.Sprintf("%s ", volIconMid), nil
+		return fmt.Sprintf("%s", volIconMid), nil
 	case volValue >= 75:
-		return fmt.Sprintf("%s ", volIconHigh), nil
+		return fmt.Sprintf("%s", volIconHigh), nil
 	default:
 		return "", nil
 	}
+}
+
+func DirIcon() string {
+	return " "
+}
+
+func MemIcon() string {
+	return " "
+}
+
+func TempIcon() string {
+	return " "
 }

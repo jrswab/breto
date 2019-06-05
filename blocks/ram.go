@@ -26,7 +26,7 @@ func FreeRam(cRam chan string, eRam chan error) {
 				eRam <- err
 			}
 
-			ramFree = fmt.Sprintf("Ram: %s free | ",
+			ramFree = fmt.Sprintf("%s |",
 				strings.TrimSpace(string(ramGib))) // set string
 
 			cRam <- ramFree // send string

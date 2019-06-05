@@ -14,5 +14,5 @@ func VolumeText() (string, error) {
 	}
 
 	percent := "%"
-	return fmt.Sprintf("%s%s | ", strings.TrimSpace(string(runVol)), percent), nil
+	return fmt.Sprintf("%s%s |", strings.TrimSpace(string(runVol)), percent), nil
 }
