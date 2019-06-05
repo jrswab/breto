@@ -22,7 +22,7 @@ func Wttr(cWttr chan string, eWttr chan error) {
 
 		if passed < 10 || hour == 0 {
 			// for options see https://wttr.in/:help
-			resp, err := http.Get("https://wttr.in/?format=%t+%w")
+			resp, err := http.Get("https://wttr.in/?format=%t")
 			if err != nil {
 				eWttr <- err
 			}
@@ -33,8 +33,7 @@ func Wttr(cWttr chan string, eWttr chan error) {
 			}
 			// convert responce to string for go channel
 			data = string(bodyData)
-			weather := fmt.Sprintf("%s | ",
-				strings.TrimSpace(data))
+			weather := fmt.Sprintf("%s |", strings.TrimSpace(data))
 			resp.Body.Close()
 			cWttr <- weather
 		}
