@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.7.1] - June 6, 2019
+### Changed
+- The check statement in wttr.go that looks for the server error webpage.
 
 ## [0.7.0] - June 5, 2019
 ### Added
