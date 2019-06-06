@@ -28,3 +28,11 @@ func TestVolumeIcon(t *testing.T) {
 	}
 	fmt.Println(vi)
 }
+
+func TestSyncthingIcon(t *testing.T) {
+	sync, err := SyncthingIcon()
+	if err != nil {
+		t.Error(err) //.Error())
+	}
+	fmt.Println(sync, err)
+}

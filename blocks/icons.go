@@ -35,6 +35,20 @@ func RedshiftIcon() (string, error) {
 	return "", nil
 }
 
+func SyncthingIcon() (string, error) {
+	syncIcon := ""
+	syncCmd := "ps ux | gawk '/syncthing/ {print $11}' | grep syncthing"
+	runSyncCmd, err := exec.Command("sh", "-c", syncCmd).Output()
+
+	if err != nil && err.Error() != "exit status 1" {
+		return "", err
+	}
+	if string(runSyncCmd) != "" {
+		return fmt.Sprintf("%s", syncIcon), nil
+	}
+	return "", nil
+}
+
 func VolumeIcon() (string, error) {
 	volIconMute := " "
 	volIconLow := " "
@@ -62,6 +76,7 @@ func VolumeIcon() (string, error) {
 	}
 }
 
+// The following have no checks that need to be made
 func DirIcon() string {
 	return " "
 }
