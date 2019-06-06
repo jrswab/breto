@@ -8,6 +8,7 @@ Currently tested with DWM, i3wm, and tmux.
 - Date & Time
 - Weather via wttr.in
 - Total RAM not used
+- Total space left in the home directory
 - Icons
 #### Current UIs:
 - DWM
@@ -59,4 +60,6 @@ If you have an easy way to display FontAwesome icons at the same scale as the te
 ## To-Do:
 1. Get a proper name
 2. Scale icons in tmux and i3wm
-3. Add /home GiB free `df -h | awk '/home/ {print $4}`
+
+## License:
+MIT
