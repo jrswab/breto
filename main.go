@@ -60,6 +60,6 @@ func main() {
 		status = fmt.Sprintf(" %s%s %s%s %s%s %s%s %s %s%s%s",
 			tempIco, weather, homeDir, homeSpace, memIco, ramFree, volIcon, volText,
 			hTime, dropbox, syncthing, rShift)
-		ui.Tmux(status) // change this to the UI of choice
+		ui.Dwm(status) // change this to the UI of choice
 	}
 }
