@@ -1,6 +1,7 @@
 package blocks
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"math"
@@ -9,6 +10,8 @@ import (
 	"time"
 )
 
+// Wttr gets the weather of the computer's general location.
+// Specify city or area code: "wttr.in/~15222" or "wttr.in/~Pittsuburgh"
 func Wttr(cWttr chan string, eWttr chan error) {
 	var passed, hour float64
 	var data string
@@ -28,8 +31,8 @@ func Wttr(cWttr chan string, eWttr chan error) {
 			}
 
 			bodyData, _ := ioutil.ReadAll(resp.Body)
-			if strings.Contain(bodyData, "error") { // wttr.in displays a webpage on server error
-				data <- "wttr.in overloaded" // display this on wttr.in server error
+			if strings.Contains(string(bodyData), "error") { // wttr.in displays a webpage on server error
+				eWttr <- errors.New("wttr.in overloaded") // display this on wttr.in server error
 			}
 			// convert responce to string for go channel
 			data = string(bodyData)
