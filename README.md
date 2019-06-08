@@ -22,6 +22,15 @@ To display icons in DWM.
    - eg. `static const char *fonts[] = { "Source Code Pro:size=13", "FontAwesome:size=14" };`
 	 - Relaunch DWM
 
+#### Current Icons:
+- Tempurature: 
+- Disk: 
+- RAM: 
+- Volume:    
+- Syncthing: 
+- Dropbox: 
+- Redshift: 
+
 Currently, the icons are much too small to be usefull in Tmux or i3wm without further configuration.
 If you have an easy way to display FontAwesome icons at the same scale as the terminal text please submit a pull request.
 
