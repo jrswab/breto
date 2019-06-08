@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [0.7.2] - June 7, 2019
+### Added
+- contributing.md
 ### Changed
 - To a custom error message for the error channel.
 ### Fixed
