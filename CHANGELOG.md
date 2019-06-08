@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.7.2] - June 7, 2019
+## Changed
+- To a custom error message for the error channel.
+## Fixed
+- strings.Contains() due to missing the last `s` before the `()`
+- converted bodyData to a string
+
 ## [0.7.1] - June 6, 2019
 ### Changed
 - The check statement in wttr.go that looks for the server error webpage.
