@@ -12,7 +12,7 @@ func HomeDisk(cHomeDisk chan string, eHomeDisk chan error) {
 	// df -h | awk '/home/ {print $4}
 	var passed, hour float64
 	var homeFree string
-	homeCmd := "df -h | awk '/home/ {print $4}'"
+	homeCmd := "df -Ph .| awk '/d*G/ {print $4}'"
 	start := time.Now()
 	ticker := time.NewTicker(time.Second)
 

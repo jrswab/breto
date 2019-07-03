@@ -88,3 +88,7 @@ func MemIcon() string {
 func TempIcon() string {
 	return " "
 }
+
+func PowerIcon() string {
+	return " "
+}
