@@ -8,7 +8,7 @@ Currently tested with DWM, i3wm, and tmux.
 - Date & Time
 - Weather via wttr.in
 - Total RAM not used
-- Total disk space left in the binaries present partition.
+- Total disk space left in the binary's present partition.
 - Total battery percentage (commented out by default)
 - Icons
 #### Current UIs:
@@ -21,7 +21,12 @@ To display icons in DWM.
 1. Install FontAwesome v4
 2. Set FontAwesome as the second font in `dwm/config.h`
    - eg. `static const char *fonts[] = { "Source Code Pro:size=13", "FontAwesome:size=14" };`
-	 - Relaunch DWM
+3. Relaunch DWM
+
+To display in tmux or i3wm:
+1. Install FontAwesome v4.
+   - Keep in mind that the icons will be very small
+	 - If you know of a way to increase the size of a specific character in the terminal please let me know.
 
 #### Current Icons:
 - Tempurature: 
