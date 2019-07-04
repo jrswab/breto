@@ -1,7 +1,6 @@
 package blocks
 
 import (
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"math"
@@ -41,7 +40,7 @@ func Wttr(cWttr chan string, eWttr chan error) {
 				weather = fmt.Sprintf("%s |", strings.TrimSpace(data))
 				cWttr <- weather
 			} else {
-				eWttr <- errors.New("wttr.in overloaded")
+				eWttr <- fmt.Errorf("Expected temp, got: %s", data)
 			}
 		}
 	}
