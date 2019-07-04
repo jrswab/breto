@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Commented out all battery status code in main.go
+- wttr custom error message to used fmt.Errorf instead for errors.New
+
+### Removed
+- The errors package from wttr.go
 
 ## [0.8.1] - July 3, 2019
 ## Changed
