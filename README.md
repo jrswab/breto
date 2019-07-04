@@ -26,7 +26,7 @@ To display icons in DWM.
 To display in tmux or i3wm:
 1. Install FontAwesome v4.
    - Keep in mind that the icons will be very small
-	 - If you know of a way to increase the size of a specific character in the terminal please let me know.
+   - If you know of a way to increase the size of a specific character in the terminal please let me know.
 
 #### Current Icons:
 - Tempurature: 
