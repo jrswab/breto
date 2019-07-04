@@ -11,10 +11,10 @@ import (
 )
 
 // Wttr gets the weather of the computer's general location.
-// Specify city or area code: "wttr.in/~15222" or "wttr.in/~Pittsuburgh"
+// Specify city or area code: "wttr.in/~15222" or "wttr.in/~Pittsburgh"
 func Wttr(cWttr chan string, eWttr chan error) {
 	var passed, hour float64
-	var data string
+	var data, weather string
 
 	start := time.Now() // to determine seconds passed
 	ticker := time.NewTicker(time.Second)
@@ -31,14 +31,18 @@ func Wttr(cWttr chan string, eWttr chan error) {
 			}
 
 			bodyData, _ := ioutil.ReadAll(resp.Body)
-			if strings.Contains(string(bodyData), "error") { // wttr.in displays a webpage on server error
-				eWttr <- errors.New("wttr.in overloaded") // display this on wttr.in server error
-			}
-			// convert responce to string for go channel
-			data = string(bodyData)
-			weather := fmt.Sprintf("%s |", strings.TrimSpace(data))
 			resp.Body.Close()
-			cWttr <- weather
+			data = string(bodyData)
+
+			// wttr.in sends an html string during the server error.
+			// Several attempts to catch the exact error proved difficult
+			// so now we catch the correct outupt instead.
+			if strings.Contains(data, "+") || strings.Contains(data, "-") {
+				weather = fmt.Sprintf("%s |", strings.TrimSpace(data))
+				cWttr <- weather
+			} else {
+				eWttr <- errors.New("wttr.in overloaded")
+			}
 		}
 	}
 }
