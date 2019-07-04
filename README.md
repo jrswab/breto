@@ -9,6 +9,7 @@ Currently tested with DWM, i3wm, and tmux.
 - Weather via wttr.in
 - Total RAM not used
 - Total space left in the home directory
+- Total battery percentage (commented out by default)
 - Icons
 #### Current UIs:
 - DWM
@@ -30,13 +31,13 @@ To display icons in DWM.
 - Syncthing: 
 - Dropbox: 
 - Redshift: 
+- Battery: 
 
 Currently, the icons are much too small to be usefull in Tmux or i3wm without further configuration.
 If you have an easy way to display FontAwesome icons at the same scale as the terminal text please submit a pull request.
 
 ## How To Use:
 1. Open main.go in a text editor.
-1. If cloned from Github change the custom package directories from Gitlab to Github.
 2. Edit the last `status` variable to contain the blocks you wish to use.
 3. Change the last line to match your UI (eg, `ui.Dwm(status)`).
 4. Build the binary.
