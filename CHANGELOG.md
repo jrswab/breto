@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - July 2, 2019
+### Added
+- Battery percentage for laptops
+- Batter power icon
+### Changed
+- Shell command for disk space from "home" to the partition the binary is run within.
+- Month, day, year, time to month, day, time
+
 ## [0.7.2] - June 7, 2019
 ### Added
 - contributing.md
