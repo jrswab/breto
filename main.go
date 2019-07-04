@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/jrswab/go-status/blocks"
+	"github.com/jrswab/go-status/icons"
 	"github.com/jrswab/go-status/ui"
 	"log"
 	"time"
@@ -27,9 +28,9 @@ func main() {
 	*/
 
 	// These are static icons and only need defined at the start
-	homeDir := blocks.DirIcon()
-	memIco := blocks.MemIcon()
-	tempIco := blocks.TempIcon()
+	homeDir := icons.Dir()
+	memIco := icons.Mem()
+	tempIco := icons.Temp()
 
 	// Each Go routine has it's own timer to delay the execution of the command.
 	cWttr := make(chan string) // start weather data routine
@@ -69,15 +70,15 @@ func main() {
 		}
 
 		// Assign Icons & non Go Routine blocks every round
-		rShift, _ = blocks.RedshiftIcon()
-		dropbox, _ = blocks.DropboxIcon()
+		rShift, _ = icons.Redshift()
+		dropbox, _ = icons.Dropbox()
 		volText, _ = blocks.VolumeText()
-		volIcon, _ = blocks.VolumeIcon()
-		syncthing, _ = blocks.SyncthingIcon()
+		volIcon, _ = icons.Volume()
+		syncthing, _ = icons.Syncthing()
 
 		// Uncomment for battery status
 		/*
-			bolt = blocks.PowerIcon()
+			bolt = icons.Power()
 			if fiveMins == 0 || passed < 10 {
 				battery, _ = blocks.Battery()
 			}

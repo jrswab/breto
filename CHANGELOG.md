@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - In code instructions to enable battery status.
+- Icons package for clearer code.
 
 ### Changed
 - Commented out all battery status code in main.go
 - wttr custom error message to used fmt.Errorf instead for errors.New
+- Icons from calls like `blocks.VolumeIcon()` to calls like `icons.Volume()`.
 
 ### Removed
 - The errors package from wttr.go
