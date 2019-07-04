@@ -8,7 +8,7 @@ Currently tested with DWM, i3wm, and tmux.
 - Date & Time
 - Weather via wttr.in
 - Total RAM not used
-- Total space left in the home directory
+- Total disk space left in the binaries present partition.
 - Total battery percentage (commented out by default)
 - Icons
 #### Current UIs:
