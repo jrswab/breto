@@ -1,5 +1,5 @@
-# Go Status Bar
-This is a script written with Go to display information.
+# Breto
+A status bar written in Go.
 Currently tested with DWM, i3wm, and tmux.
 
 ## Current Features:
