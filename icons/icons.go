@@ -6,6 +6,7 @@ import (
 	"os/exec"
 )
 
+// Dropbox sends the Dropbox icon when the app is running.
 func Dropbox() (string, error) {
 	// ps ux | awk '/dropbox/ {print $11}' | grep dropbox
 	dbIcon := ""
@@ -21,6 +22,7 @@ func Dropbox() (string, error) {
 	return "", nil
 }
 
+// Redshift sends the icon when the app is running.
 func Redshift() (string, error) {
 	rsIcon := ""
 	rsCmd := "ps ux | gawk '/redshift/ {print $11}' | grep redshift"
@@ -35,6 +37,7 @@ func Redshift() (string, error) {
 	return "", nil
 }
 
+// Syncthing sends the icon when the app is running.
 func Syncthing() (string, error) {
 	syncIcon := ""
 	syncCmd := "ps ux | gawk '/syncthing/ {print $11}' | grep syncthing"
@@ -49,6 +52,7 @@ func Syncthing() (string, error) {
 	return "", nil
 }
 
+// Volume sends the icon when the app is running.
 func Volume() (string, error) {
 	volIconMute := " "
 	volIconLow := " "
@@ -77,18 +81,23 @@ func Volume() (string, error) {
 }
 
 // The following have no checks that need to be made
+
+// Dir sends the icon when the app is running.
 func Dir() string {
 	return " "
 }
 
+// Mem sends the icon when the app is running.
 func Mem() string {
 	return " "
 }
 
+// Temp sends the icon when the app is running.
 func Temp() string {
 	return " "
 }
 
+// Power sends the icon when the app is running.
 func Power() string {
 	return " "
 }

@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/jrswab/go-status/blocks"
-	"github.com/jrswab/go-status/icons"
-	"github.com/jrswab/go-status/ui"
 	"log"
 	"time"
+
+	"github.com/jrswab/breto/blocks"
+	"github.com/jrswab/breto/icons"
+	"github.com/jrswab/breto/ui"
 )
 
 // To Add Battery Status:
@@ -15,15 +16,40 @@ import (
 // Also, add the correct string formatting to
 // the status assignment at the end of the file and add "math" to the imports
 
-func main() {
-	var weather, ramFree, homeSpace string // Go routine blocks
-	var wttrErr, ramErr, homeErr error     // Go routine errors
-	var status, hTime, rShift, dropbox, volIcon, volText, syncthing string
+// info holds dynamic information
+type info struct {
+	hTime     string
+	weather   string
+	ramFree   string
+	homeSpace string
+	volText   string
+	wttrErr   error
+	ramErr    error
+	homeErr   error
+}
 
+// icons holds the text of dynamic icons
+type symbols struct {
+	status    string
+	rShift    string
+	dropbox   string
+	volIcon   string
+	syncthing string
+}
+
+// batInfo holds information for battery capacity
+type batInfo struct {
+	passed   float64
+	fiveMins float64
+}
+
+func main() {
+	var status string
+	stats := info{}
+	ico := symbols{}
 	// Uncomment for battery status
 	/*
-		var bolt, battery string
-		var passed, fiveMins float64
+		baty := batInfo{}
 		start := time.Now()
 	*/
 
@@ -37,9 +63,9 @@ func main() {
 	eWttr := make(chan error)
 	go blocks.Wttr(cWttr, eWttr)
 
-	cRam := make(chan string) // start free ram data routine
-	eRam := make(chan error)
-	go blocks.FreeRam(cRam, eRam)
+	cRAM := make(chan string) // start free ram data routine
+	eRAM := make(chan error)
+	go blocks.FreeRam(cRAM, eRAM)
 
 	cHomeDisk := make(chan string) // start free home dir space routine
 	eHomeDisk := make(chan error)
@@ -48,46 +74,47 @@ func main() {
 	ticker := time.NewTicker(time.Second)
 	for range ticker.C {
 		// add year & seconds with "Jan 02, 2006 15:04:05"
-		hTime = time.Now().Format("Jan 02 15:04")
+		stats.hTime = time.Now().Format("Jan 02 15:04")
 
 		// Uncomment for battery status
 		/*
-			passed = time.Since(start).Seconds()
-			fiveMins = math.Floor(math.Remainder(passed, 300))
+			baty.passed = time.Since(start).Seconds()
+			baty.fiveMins = math.Floor(math.Remainder(passed, 300))
 		*/
 
 		select { // update the go routine channels as they send data
-		case weather = <-cWttr:
-		case wttrErr = <-eWttr:
-			log.Println(wttrErr.Error())
-		case ramFree = <-cRam:
-		case ramErr = <-eRam:
-			log.Println(ramErr.Error())
-		case homeSpace = <-cHomeDisk:
-		case homeErr = <-eHomeDisk:
-			log.Println(homeErr.Error())
+		case stats.weather = <-cWttr:
+		case stats.wttrErr = <-eWttr:
+			log.Println(stats.wttrErr.Error())
+		case stats.ramFree = <-cRAM:
+		case stats.ramErr = <-eRAM:
+			log.Println(stats.ramErr.Error())
+		case stats.homeSpace = <-cHomeDisk:
+		case stats.homeErr = <-eHomeDisk:
+			log.Println(stats.homeErr.Error())
 		default:
 		}
 
 		// Assign Icons & non Go Routine blocks every round
-		rShift, _ = icons.Redshift()
-		dropbox, _ = icons.Dropbox()
-		volText, _ = blocks.VolumeText()
-		volIcon, _ = icons.Volume()
-		syncthing, _ = icons.Syncthing()
+		ico.rShift, _ = icons.Redshift()
+		ico.dropbox, _ = icons.Dropbox()
+		stats.volText, _ = blocks.VolumeText()
+		ico.volIcon, _ = icons.Volume()
+		ico.syncthing, _ = icons.Syncthing()
 
 		// Uncomment for battery status
 		/*
 			bolt = icons.Power()
-			if fiveMins == 0 || passed < 10 {
+			if baty.fiveMins == 0 || passed < 10 {
 				battery, _ = blocks.Battery()
 			}
 		*/
 
 		// Change by editing variables & `%s`
 		status = fmt.Sprintf(" %s%s %s%s %s%s %s%s %s %s%s%s",
-			tempIco, weather, homeDir, homeSpace, memIco, ramFree, volIcon, volText,
-			hTime, dropbox, syncthing, rShift)
-		ui.Dwm(status) // change this to the UI of choice
+			tempIco, stats.weather, homeDir, stats.homeSpace,
+			memIco, stats.ramFree, ico.volIcon, stats.volText,
+			stats.hTime, ico.dropbox, ico.syncthing, ico.rShift)
+		ui.Tmux(status) // change this to the UI of choice
 	}
 }
