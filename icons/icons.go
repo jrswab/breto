@@ -1,4 +1,4 @@
-package blocks
+package icons
 
 import (
 	"encoding/binary"
@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-func DropboxIcon() (string, error) {
+func Dropbox() (string, error) {
 	// ps ux | awk '/dropbox/ {print $11}' | grep dropbox
 	dbIcon := ""
 	dbCmd := "ps ux | gawk '/dropbox/ {print $11}' | grep dropbox"
@@ -21,7 +21,7 @@ func DropboxIcon() (string, error) {
 	return "", nil
 }
 
-func RedshiftIcon() (string, error) {
+func Redshift() (string, error) {
 	rsIcon := ""
 	rsCmd := "ps ux | gawk '/redshift/ {print $11}' | grep redshift"
 	runRsCmd, err := exec.Command("sh", "-c", rsCmd).Output()
@@ -35,7 +35,7 @@ func RedshiftIcon() (string, error) {
 	return "", nil
 }
 
-func SyncthingIcon() (string, error) {
+func Syncthing() (string, error) {
 	syncIcon := ""
 	syncCmd := "ps ux | gawk '/syncthing/ {print $11}' | grep syncthing"
 	runSyncCmd, err := exec.Command("sh", "-c", syncCmd).Output()
@@ -49,7 +49,7 @@ func SyncthingIcon() (string, error) {
 	return "", nil
 }
 
-func VolumeIcon() (string, error) {
+func Volume() (string, error) {
 	volIconMute := " "
 	volIconLow := " "
 	volIconMid := " "
@@ -77,18 +77,18 @@ func VolumeIcon() (string, error) {
 }
 
 // The following have no checks that need to be made
-func DirIcon() string {
+func Dir() string {
 	return " "
 }
 
-func MemIcon() string {
+func Mem() string {
 	return " "
 }
 
-func TempIcon() string {
+func Temp() string {
 	return " "
 }
 
-func PowerIcon() string {
+func Power() string {
 	return " "
 }

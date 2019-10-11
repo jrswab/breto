@@ -8,7 +8,8 @@ Currently tested with DWM, i3wm, and tmux.
 - Date & Time
 - Weather via wttr.in
 - Total RAM not used
-- Total space left in the home directory
+- Total disk space left in the binary's present partition.
+- Total battery percentage (commented out by default)
 - Icons
 #### Current UIs:
 - DWM
@@ -20,7 +21,12 @@ To display icons in DWM.
 1. Install FontAwesome v4
 2. Set FontAwesome as the second font in `dwm/config.h`
    - eg. `static const char *fonts[] = { "Source Code Pro:size=13", "FontAwesome:size=14" };`
-	 - Relaunch DWM
+3. Relaunch DWM
+
+To display in tmux or i3wm:
+1. Install FontAwesome v4.
+   - Keep in mind that the icons are currently very small.
+   - Research in progess.
 
 #### Current Icons:
 - Tempurature: 
@@ -30,13 +36,13 @@ To display icons in DWM.
 - Syncthing: 
 - Dropbox: 
 - Redshift: 
+- Battery: 
 
 Currently, the icons are much too small to be usefull in Tmux or i3wm without further configuration.
 If you have an easy way to display FontAwesome icons at the same scale as the terminal text please submit a pull request.
 
 ## How To Use:
 1. Open main.go in a text editor.
-1. If cloned from Github change the custom package directories from Gitlab to Github.
 2. Edit the last `status` variable to contain the blocks you wish to use.
 3. Change the last line to match your UI (eg, `ui.Dwm(status)`).
 4. Build the binary.
@@ -69,6 +75,7 @@ If you have an easy way to display FontAwesome icons at the same scale as the te
 ## To-Do:
 1. Get a proper name
 2. Scale icons in tmux and i3wm
+   - [This Unix Stack Exchange post may help](http://unix.stackexchange.com/questions/49779/ddg#49823)
 
 ## License:
 MIT
