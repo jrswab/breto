@@ -5,14 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.9.0] - October 10, 2019
 ### Added
 - In code instructions to enable battery status.
 - Icons package for clearer code.
+- Descriptions to `icons.go`
 
 ### Changed
 - Commented out all battery status code in main.go
 - wttr custom error message to used fmt.Errorf instead for errors.New
 - Icons from calls like `blocks.VolumeIcon()` to calls like `icons.Volume()`.
+- Information data from variables in main.go to structs
 
 ### Removed
 - The errors package from wttr.go
