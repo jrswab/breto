@@ -8,6 +8,9 @@ import (
 	"time"
 )
 
+// FreeRam is called every five seconds to display the current
+// ram avalible. Command used is `free` piped into gawk to return
+// the "available" (7th) column in the row labeled `Mem`.
 func FreeRam(cRam chan string, eRam chan error) {
 	var passed, tenSecs float64
 	start := time.Now() // set to determine seconds passed
@@ -19,7 +22,7 @@ func FreeRam(cRam chan string, eRam chan error) {
 
 		if passed < 5 || tenSecs == 0 { // trigger: asap or divisible by ten
 			ramFree := ""
-			ramCmd := "free -h | gawk '/Mem:/ {print $4}'" // set shell command
+			ramCmd := "free -h | gawk '/Mem:/ {print $7}'" // set shell command
 
 			ramGib, err := exec.Command("sh", "-c", ramCmd).Output() // run and save the output
 			if err != nil {

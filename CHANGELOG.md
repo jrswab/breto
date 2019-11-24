@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.1] - November 23, 2019
+
+### Added
+- Comment to FreeRam()
+
+### Changed
+- License to BSD-3
+- FreeRam() to return the "avalible" column not "free" column.
+
 ## [0.9.0] - October 10, 2019
 ### Added
 - In code instructions to enable battery status.
