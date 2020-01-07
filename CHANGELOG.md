@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - January 06, 2020
+
+### Added
+- Polybar to the list of UI's
+
 ## [0.9.1] - November 23, 2019
 
 ### Added

@@ -15,18 +15,30 @@ Currently tested with DWM, i3wm, and tmux.
 - DWM
 - i3wm
 - tmux
+- Polybar
 
 ### Icons:
 To display icons in DWM.
-1. Install FontAwesome v4
+1. Install FontAwesome
 2. Set FontAwesome as the second font in `dwm/config.h`
    - eg. `static const char *fonts[] = { "Source Code Pro:size=13", "FontAwesome:size=14" };`
 3. Relaunch DWM
 
 To display in tmux or i3wm:
-1. Install FontAwesome v4.
+1. Install FontAwesome
    - Keep in mind that the icons are currently very small.
    - Research in progess.
+
+To display in Polybar:
+1. Install Font Awesome:
+2. Add to your Polybar config:
+```
+font-0 = {base font here}
+font-1 = "Font Awesome 5 Free:style=Regular:pixelsize=12;1"
+font-2 = "Font Awesome 5 Free:style=Solid:pixelsize=12;1"
+font-3 = "Font Awesome 5 Brands:pixelsize=12;1"
+```
+3. If not using Font Awesome 5 search for your version with `fc-list | grep Awesome`.
 
 #### Current Icons:
 - Tempurature: 
@@ -65,6 +77,15 @@ If you have an easy way to display FontAwesome icons at the same scale as the te
 ### Adding to i3wm:
 - In the i3wm confige file, change `status_command ...` to `status_command PATH/TO/go-status`
 
+### Adding to Polybar:
+- Add the following module to your Polybar configuration file:
+```
+[module/breto]
+type = custom/script
+exec = /home/jaron/custom-setup/breto
+tail = true
+```
+
 ## Wttr.in Options:
 1. Add your area to the weather function
    - Area Code: 'wttr.in/~00000?format=2' 
@@ -73,8 +94,7 @@ If you have an easy way to display FontAwesome icons at the same scale as the te
 2. Add tweaks to `blocks/wttr.go`
 
 ## To-Do:
-1. Get a proper name
-2. Scale icons in tmux and i3wm
+1. Scale icons in tmux and i3wm
    - [This Unix Stack Exchange post may help](http://unix.stackexchange.com/questions/49779/ddg#49823)
 
 ## License:

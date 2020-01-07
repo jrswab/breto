@@ -115,6 +115,6 @@ func main() {
 			tempIco, stats.weather, homeDir, stats.homeSpace,
 			memIco, stats.ramFree, ico.volIcon, stats.volText,
 			stats.hTime, ico.dropbox, ico.syncthing, ico.rShift)
-		ui.Tmux(status) // change this to the UI of choice
+		ui.Polybar(status) // change this to the UI of choice
 	}
 }
