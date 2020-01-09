@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.10.0] - January 06, 2020
 
 ### Added
-- Polybar to the list of UI's
+- CLI flag to enable DWM status bar out put `--dwm=true` to enable
+- CLI flag to enable batter status information.
+
+### Changed
+- `Status` formating for easier editing.
 
 ## [0.9.1] - November 23, 2019
 

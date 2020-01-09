@@ -1,8 +1,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
+	"math"
 	"time"
 
 	"github.com/jrswab/breto/blocks"
@@ -23,6 +25,7 @@ type info struct {
 	ramFree   string
 	homeSpace string
 	volText   string
+	power     string
 	wttrErr   error
 	ramErr    error
 	homeErr   error
@@ -35,6 +38,7 @@ type symbols struct {
 	dropbox   string
 	volIcon   string
 	syncthing string
+	bolt      string
 }
 
 // batInfo holds information for battery capacity
@@ -44,19 +48,23 @@ type batInfo struct {
 }
 
 func main() {
+	var dwm bool
+	flag.BoolVar(&dwm, "dwm", false, "Used to enable output for DWM's status bar\n Example: -dwm=true")
+	var battery bool
+	flag.BoolVar(&battery, "battery", false, "Used to enable battery module.\n Example: -battery=true")
+	flag.Parse()
+
 	var status string
 	stats := info{}
 	ico := symbols{}
-	// Uncomment for battery status
-	/*
-		baty := batInfo{}
-		start := time.Now()
-	*/
+	baty := batInfo{}
+	start := time.Now()
 
 	// These are static icons and only need defined at the start
 	homeDir := icons.Dir()
 	memIco := icons.Mem()
 	tempIco := icons.Temp()
+	ico.bolt = icons.Power()
 
 	// Each Go routine has it's own timer to delay the execution of the command.
 	cWttr := make(chan string) // start weather data routine
@@ -76,13 +84,12 @@ func main() {
 		// add year & seconds with "Jan 02, 2006 15:04:05"
 		stats.hTime = time.Now().Format("Jan 02 15:04")
 
-		// Uncomment for battery status
-		/*
+		if battery {
 			baty.passed = time.Since(start).Seconds()
-			baty.fiveMins = math.Floor(math.Remainder(passed, 300))
-		*/
+			baty.fiveMins = math.Floor(math.Remainder(baty.passed, 300))
+		}
 
-		select { // update the go routine channels as they send data
+		select { // updates the go routine channels as they send data
 		case stats.weather = <-cWttr:
 		case stats.wttrErr = <-eWttr:
 			log.Println(stats.wttrErr.Error())
@@ -102,19 +109,27 @@ func main() {
 		ico.volIcon, _ = icons.Volume()
 		ico.syncthing, _ = icons.Syncthing()
 
-		// Uncomment for battery status
-		/*
-			bolt = icons.Power()
-			if baty.fiveMins == 0 || passed < 10 {
-				battery, _ = blocks.Battery()
+		if battery {
+			if baty.fiveMins == 0 || baty.passed < 10 {
+				stats.power, _ = blocks.Battery()
 			}
-		*/
+		}
 
 		// Change by editing variables & `%s`
-		status = fmt.Sprintf(" %s%s %s%s %s%s %s%s %s %s%s%s",
-			tempIco, stats.weather, homeDir, stats.homeSpace,
-			memIco, stats.ramFree, ico.volIcon, stats.volText,
-			stats.hTime, ico.dropbox, ico.syncthing, ico.rShift)
-		ui.Polybar(status) // change this to the UI of choice
+		status = fmt.Sprintf("%s%s", tempIco, stats.weather)
+		status = fmt.Sprintf(" %s %s%s", status, homeDir, stats.homeSpace)
+		status = fmt.Sprintf(" %s %s%s", status, memIco, stats.ramFree)
+		status = fmt.Sprintf(" %s %s%s", status, ico.volIcon, stats.volText)
+		if battery {
+			status = fmt.Sprintf(" %s %s%s", status, ico.bolt, stats.power)
+		}
+		status = fmt.Sprintf(" %s %s", status, stats.hTime)
+		status = fmt.Sprintf(" %s %s%s%s", status, ico.dropbox, ico.syncthing, ico.rShift)
+
+		if dwm {
+			ui.Dwm(status)
+		} else {
+			ui.Default(status)
+		}
 	}
 }

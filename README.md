@@ -9,7 +9,7 @@ Currently tested with DWM, i3wm, and tmux.
 - Weather via wttr.in
 - Total RAM not used
 - Total disk space left in the binary's present partition.
-- Total battery percentage (commented out by default)
+- Total battery percentage (off by default)
 - Icons
 #### Current UIs:
 - DWM
@@ -17,20 +17,24 @@ Currently tested with DWM, i3wm, and tmux.
 - tmux
 - Polybar
 
+#### CLI Flags
+- `-dwm=true` to use in DWM's status bar
+- `-battery=true` to enable battery block
+
 ### Icons:
-To display icons in DWM.
-1. Install FontAwesome
+#### To display icons in DWM.
+1. Install Font Awesome 5
 2. Set FontAwesome as the second font in `dwm/config.h`
-   - eg. `static const char *fonts[] = { "Source Code Pro:size=13", "FontAwesome:size=14" };`
+   - eg. `static const char *fonts[] = { "Source Code Pro:size=13", "Font Awesome 5 Free:style=Regular:size=14" };`
 3. Relaunch DWM
 
-To display in tmux or i3wm:
-1. Install FontAwesome
+#### To display in tmux or i3wm:
+1. Install Font Awesome 5
    - Keep in mind that the icons are currently very small.
    - Research in progess.
 
-To display in Polybar:
-1. Install Font Awesome:
+#### To display in Polybar:
+1. Install Font Awesome 5:
 2. Add to your Polybar config:
 ```
 font-0 = {base font here}
@@ -56,33 +60,32 @@ If you have an easy way to display FontAwesome icons at the same scale as the te
 ## How To Use:
 1. Open main.go in a text editor.
 2. Edit the last `status` variable to contain the blocks you wish to use.
-3. Change the last line to match your UI (eg, `ui.Dwm(status)`).
-4. Build the binary.
-5. Edit your config file to use the new binary.
+3. Build the binary.
+4. Edit your config file to use the new binary.
+   - If using DWM execute with the `--dwm=true` flag.
 
 ### Adding to DWM:
-- Simply set `ui.Dwm(status)`, compile, and execute.
-- If you already have a startup script for DWM just add a new line for go-status
+- If you already have a startup script for DWM just add a new line with the path to this binary.
 
 ### Addng to Tmux:
 - `set -g status-right "#($HOME/PATHTO/tmux-status)"`
  - If you have colors in this setting add the path at the end of the string
  - Be sure to use the correct path and name of the file you built with GO.
- - Running `mv go-status ~/tmux-status` will allow you to use `"($HOME/tmux-status)"` in your config.
+ - Running `mv breto ~/tmux-status` will allow you to use `"($HOME/tmux-status)"` in your config.
 - `set -g status-right-length 53`
  - If you are not using all the custom packages this number can be lower
- - This also will vary based on screen size. 53 is the minimum that worke for all current blocks
+ - This also will vary based on screen size. 53 is the minimum that worked for all current blocks on my montior.
  - If you notice the status getting cut off just increase the number and reload tmux.
 
 ### Adding to i3wm:
-- In the i3wm confige file, change `status_command ...` to `status_command PATH/TO/go-status`
+- In the i3wm confige file, change `status_command ...` to `status_command PATH/TO/breto`
 
 ### Adding to Polybar:
 - Add the following module to your Polybar configuration file:
 ```
 [module/breto]
 type = custom/script
-exec = /home/jaron/custom-setup/breto
+exec = /path/to/breto
 tail = true
 ```
 
