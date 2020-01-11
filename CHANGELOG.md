@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - January 11, 2020
+
+### Added
+- CLI flags for the clock, audio, memory, diskSpace, temperature, and tray
+- `init()` to set up CLI flags instead.
+- Comments for each exported block function
+- Checks for CLI flags to disable go routines if the user disables a speific block
+
+### Changed
+- `status` build to includ if statments based off CLI flag variables.
+- CLI flag variables to be global after adding `init()`
+
+### Removed
+- `|` from all block returns.
+
 ## [0.10.0] - January 06, 2020
 
 ### Added

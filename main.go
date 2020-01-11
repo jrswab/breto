@@ -12,13 +12,9 @@ import (
 	"github.com/jrswab/breto/ui"
 )
 
-// To Add Battery Status:
-// Uncomment all lines that follow the message:
-// "Uncomment for battery status"
-// Also, add the correct string formatting to
-// the status assignment at the end of the file and add "math" to the imports
+// CLI flag variables
+var dwm, battery, clock, audio, memory, diskSpace, temperature, tray bool
 
-// info holds dynamic information
 type info struct {
 	hTime     string
 	weather   string
@@ -31,7 +27,6 @@ type info struct {
 	homeErr   error
 }
 
-// icons holds the text of dynamic icons
 type symbols struct {
 	status    string
 	rShift    string
@@ -41,44 +36,51 @@ type symbols struct {
 	bolt      string
 }
 
-// batInfo holds information for battery capacity
 type batInfo struct {
 	passed   float64
 	fiveMins float64
 }
 
+func init() {
+	// Setup and define cli flags
+	flag.BoolVar(&dwm, "dwm", false, "Used to enable output for DWM's status bar.\n Example: --dwm=true")
+	flag.BoolVar(&battery, "battery", false, "Used to enable battery module.\n Example: --battery=true")
+	flag.BoolVar(&clock, "dateTime", true, "Used to disable the date and time module.\n Example: --dateTime=false")
+	flag.BoolVar(&audio, "volume", true, "Used to disable the volume module.\n Example: --volume=false")
+	flag.BoolVar(&memory, "ram", true, "Used to disable the RAM module.\n Example: --ram=false")
+	flag.BoolVar(&diskSpace, "storage", true, "Used to disable the home directory storage module.\n Example: --storage=false")
+	flag.BoolVar(&temperature, "temp", true, "Used to disable the temperature module.\n Example: --temp=false")
+	flag.BoolVar(&tray, "tray", true, "Used to disable the custom tray module.\n Example: --tray=false")
+}
+
 func main() {
-	var dwm bool
-	flag.BoolVar(&dwm, "dwm", false, "Used to enable output for DWM's status bar\n Example: -dwm=true")
-	var battery bool
-	flag.BoolVar(&battery, "battery", false, "Used to enable battery module.\n Example: -battery=true")
 	flag.Parse()
 
-	var status string
 	stats := info{}
 	ico := symbols{}
 	baty := batInfo{}
-	start := time.Now()
-
-	// These are static icons and only need defined at the start
-	homeDir := icons.Dir()
-	memIco := icons.Mem()
-	tempIco := icons.Temp()
-	ico.bolt = icons.Power()
 
 	// Each Go routine has it's own timer to delay the execution of the command.
-	cWttr := make(chan string) // start weather data routine
+	// A Go routine will run unless it's CLI flag is set to false.
+	cWttr := make(chan string)
 	eWttr := make(chan error)
-	go blocks.Wttr(cWttr, eWttr)
+	if temperature {
+		go blocks.Wttr(cWttr, eWttr)
+	}
 
-	cRAM := make(chan string) // start free ram data routine
+	cRAM := make(chan string)
 	eRAM := make(chan error)
-	go blocks.FreeRam(cRAM, eRAM)
+	if memory {
+		go blocks.FreeRam(cRAM, eRAM)
+	}
 
-	cHomeDisk := make(chan string) // start free home dir space routine
+	cHomeDisk := make(chan string)
 	eHomeDisk := make(chan error)
-	go blocks.HomeDisk(cHomeDisk, eHomeDisk)
+	if diskSpace {
+		go blocks.HomeDisk(cHomeDisk, eHomeDisk)
+	}
 
+	start := time.Now() // for batter time math
 	ticker := time.NewTicker(time.Second)
 	for range ticker.C {
 		// add year & seconds with "Jan 02, 2006 15:04:05"
@@ -102,30 +104,39 @@ func main() {
 		default:
 		}
 
-		// Assign Icons & non Go Routine blocks every round
-		ico.rShift, _ = icons.Redshift()
-		ico.dropbox, _ = icons.Dropbox()
-		stats.volText, _ = blocks.VolumeText()
-		ico.volIcon, _ = icons.Volume()
-		ico.syncthing, _ = icons.Syncthing()
-
+		// Status bar information as defined by the CLI flags.
+		status := "" // reset status on every run.
+		if temperature {
+			status = fmt.Sprintf("%s %s%s ", status, icons.Temp(), stats.weather)
+		}
+		if diskSpace {
+			status = fmt.Sprintf("%s %s%s ", status, icons.Dir(), stats.homeSpace)
+		}
+		if memory {
+			status = fmt.Sprintf("%s %s%s ", status, icons.Mem(), stats.ramFree)
+		}
+		if audio {
+			stats.volText, _ = blocks.VolumeText()
+			ico.volIcon, _ = icons.Volume()
+			status = fmt.Sprintf("%s %s%s ", status, ico.volIcon, stats.volText)
+		}
 		if battery {
 			if baty.fiveMins == 0 || baty.passed < 10 {
 				stats.power, _ = blocks.Battery()
 			}
+			status = fmt.Sprintf("%s %s%s ", status, icons.Power(), stats.power)
+		}
+		if clock {
+			status = fmt.Sprintf("%s %s ", status, stats.hTime)
+		}
+		if tray {
+			ico.rShift, _ = icons.Redshift()
+			ico.dropbox, _ = icons.Dropbox()
+			ico.syncthing, _ = icons.Syncthing()
+			status = fmt.Sprintf("%s %s%s%s", status, ico.dropbox, ico.syncthing, ico.rShift)
 		}
 
-		// Change by editing variables & `%s`
-		status = fmt.Sprintf("%s%s", tempIco, stats.weather)
-		status = fmt.Sprintf(" %s %s%s", status, homeDir, stats.homeSpace)
-		status = fmt.Sprintf(" %s %s%s", status, memIco, stats.ramFree)
-		status = fmt.Sprintf(" %s %s%s", status, ico.volIcon, stats.volText)
-		if battery {
-			status = fmt.Sprintf(" %s %s%s", status, ico.bolt, stats.power)
-		}
-		status = fmt.Sprintf(" %s %s", status, stats.hTime)
-		status = fmt.Sprintf(" %s %s%s%s", status, ico.dropbox, ico.syncthing, ico.rShift)
-
+		// Output methods as specified by CLI flags.
 		if dwm {
 			ui.Dwm(status)
 		} else {
