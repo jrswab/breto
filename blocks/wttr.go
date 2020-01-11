@@ -37,7 +37,7 @@ func Wttr(cWttr chan string, eWttr chan error) {
 			// Several attempts to catch the exact error proved difficult
 			// so now we catch the correct outupt instead.
 			if strings.Contains(data, "+") || strings.Contains(data, "-") {
-				weather = fmt.Sprintf("%s |", strings.TrimSpace(data))
+				weather = fmt.Sprintf("%s", strings.TrimSpace(data))
 				cWttr <- weather
 			} else {
 				eWttr <- fmt.Errorf("Expected temp, got: %s", data)

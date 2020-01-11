@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// HomeDisk returns the remaining home directory storage space in GiB
 func HomeDisk(cHomeDisk chan string, eHomeDisk chan error) {
 	// df -h | awk '/home/ {print $4}
 	var passed, hour float64
@@ -26,7 +27,7 @@ func HomeDisk(cHomeDisk chan string, eHomeDisk chan error) {
 				eHomeDisk <- err
 			}
 
-			homeFree = fmt.Sprintf("%s |", strings.TrimSpace(string(homeOut)))
+			homeFree = fmt.Sprintf("%s", strings.TrimSpace(string(homeOut)))
 			cHomeDisk <- homeFree
 		}
 	}

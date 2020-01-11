@@ -1,6 +1,6 @@
 # Breto
 A status bar written in Go.
-Currently tested with DWM, i3wm, and tmux.
+Currently tested with DWM, i3wm, tmux, and Polybar.
 
 ## Current Features:
 ### Master Branch:
@@ -20,6 +20,12 @@ Currently tested with DWM, i3wm, and tmux.
 #### CLI Flags
 - `-dwm=true` to use in DWM's status bar
 - `-battery=true` to enable battery block
+- `-dateTime=false` to remove the date/time block
+- `-volume=false` to remove volume percentage block
+- `-ram=false` to remove RAM remaining block
+- `-storage=false` to remove the home directory storage remaining block
+- `-temp=false` to remove the weather block
+- `-tray=false` to remove the "system" tray block
 
 ### Icons:
 #### To display icons in DWM.
