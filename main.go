@@ -13,7 +13,7 @@ import (
 )
 
 // CLI flag variables
-var dwm, battery, clock, audio, memory, diskSpace, temperature, tray bool
+var dwm, battery, clock, audio, memory, diskSpace, temperature, tray, emoji bool
 
 type info struct {
 	hTime     string
@@ -51,6 +51,7 @@ func init() {
 	flag.BoolVar(&diskSpace, "storage", true, "Used to disable the home directory storage module.\n Example: --storage=false")
 	flag.BoolVar(&temperature, "temp", true, "Used to disable the temperature module.\n Example: --temp=false")
 	flag.BoolVar(&tray, "tray", true, "Used to disable the custom tray module.\n Example: --tray=false")
+	flag.BoolVar(&emoji, "emoji", false, "Used to enable Openmoji icons instead of Awosome Font.\n Example: --emoji=true")
 }
 
 func main() {
@@ -107,32 +108,32 @@ func main() {
 		// Status bar information as defined by the CLI flags.
 		status := "" // reset status on every run.
 		if temperature {
-			status = fmt.Sprintf("%s %s%s ", status, icons.Temp(), stats.weather)
+			status = fmt.Sprintf("%s %s%s ", status, icons.Temp(emoji), stats.weather)
 		}
 		if diskSpace {
-			status = fmt.Sprintf("%s %s%s ", status, icons.Dir(), stats.homeSpace)
+			status = fmt.Sprintf("%s %s%s ", status, icons.Dir(emoji), stats.homeSpace)
 		}
 		if memory {
-			status = fmt.Sprintf("%s %s%s ", status, icons.Mem(), stats.ramFree)
+			status = fmt.Sprintf("%s %s%s ", status, icons.Mem(emoji), stats.ramFree)
 		}
 		if audio {
 			stats.volText, _ = blocks.VolumeText()
-			ico.volIcon, _ = icons.Volume()
+			ico.volIcon, _ = icons.Volume(emoji)
 			status = fmt.Sprintf("%s %s%s ", status, ico.volIcon, stats.volText)
 		}
 		if battery {
 			if baty.fiveMins == 0 || baty.passed < 10 {
 				stats.power, _ = blocks.Battery()
 			}
-			status = fmt.Sprintf("%s %s%s ", status, icons.Power(), stats.power)
+			status = fmt.Sprintf("%s %s%s ", status, icons.Power(emoji), stats.power)
 		}
 		if clock {
 			status = fmt.Sprintf("%s %s ", status, stats.hTime)
 		}
 		if tray {
-			ico.rShift, _ = icons.Redshift()
-			ico.dropbox, _ = icons.Dropbox()
-			ico.syncthing, _ = icons.Syncthing()
+			ico.rShift, _ = icons.Redshift(emoji)
+			ico.dropbox, _ = icons.Dropbox(emoji)
+			ico.syncthing, _ = icons.Syncthing(emoji)
 			status = fmt.Sprintf("%s %s%s%s", status, ico.dropbox, ico.syncthing, ico.rShift)
 		}
 

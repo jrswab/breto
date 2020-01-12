@@ -7,9 +7,12 @@ import (
 )
 
 // Dropbox sends the Dropbox icon when the app is running.
-func Dropbox() (string, error) {
+func Dropbox(emoji bool) (string, error) {
 	// ps ux | awk '/dropbox/ {print $11}' | grep dropbox
 	dbIcon := ""
+	if emoji {
+		dbIcon = "🗄"
+	}
 	dbCmd := "ps ux | gawk '/dropbox/ {print $11}' | grep dropbox"
 	runDbCmd, err := exec.Command("sh", "-c", dbCmd).Output()
 
@@ -23,8 +26,11 @@ func Dropbox() (string, error) {
 }
 
 // Redshift sends the icon when the app is running.
-func Redshift() (string, error) {
+func Redshift(emoji bool) (string, error) {
 	rsIcon := ""
+	if emoji {
+		rsIcon = "💡"
+	}
 	rsCmd := "ps ux | gawk '/redshift/ {print $11}' | grep redshift"
 	runRsCmd, err := exec.Command("sh", "-c", rsCmd).Output()
 
@@ -38,8 +44,11 @@ func Redshift() (string, error) {
 }
 
 // Syncthing sends the icon when the app is running.
-func Syncthing() (string, error) {
+func Syncthing(emoji bool) (string, error) {
 	syncIcon := ""
+	if emoji {
+		syncIcon = "⬌"
+	}
 	syncCmd := "ps ux | gawk '/syncthing/ {print $11}' | grep syncthing"
 	runSyncCmd, err := exec.Command("sh", "-c", syncCmd).Output()
 
@@ -53,11 +62,21 @@ func Syncthing() (string, error) {
 }
 
 // Volume sends the icon when the app is running.
-func Volume() (string, error) {
+func Volume(emoji bool) (string, error) {
+	// Font Awesome:
 	volIconMute := " "
 	volIconLow := " "
 	volIconMid := " "
 	volIconHigh := " "
+
+	// Openmoji:
+	if emoji {
+		volIconMute = "🔇 "
+		volIconLow = "🔈 "
+		volIconMid = "🔉 "
+		volIconHigh = "🔊 "
+	}
+
 	volCmd := "amixer -D pulse sget Master | awk '/Front Right:/ {print $5}' | grep -o '[0-9]*'"
 	runVolCmd, err := exec.Command("sh", "-c", volCmd).Output()
 	volValue := binary.LittleEndian.Uint16(runVolCmd)
@@ -83,21 +102,33 @@ func Volume() (string, error) {
 // The following have no checks that need to be made
 
 // Dir sends the icon when the app is running.
-func Dir() string {
+func Dir(emoji bool) string {
+	if emoji {
+		return "📂 "
+	}
 	return " "
 }
 
 // Mem sends the icon when the app is running.
-func Mem() string {
+func Mem(emoji bool) string {
+	if emoji {
+		return "💾 "
+	}
 	return " "
 }
 
 // Temp sends the icon when the app is running.
-func Temp() string {
+func Temp(emoji bool) string {
+	if emoji {
+		return "🌡 "
+	}
 	return " "
 }
 
 // Power sends the icon when the app is running.
-func Power() string {
+func Power(emoji bool) string {
+	if emoji {
+		return "⚡ "
+	}
 	return " "
 }
