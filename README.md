@@ -54,9 +54,10 @@ font-3 = "Font Awesome 5 Brands:pixelsize=12;1"
 ```
 
 ## How To Use:
-1. Open main.go in a text editor.
-2. Edit the last `status` variable to contain the blocks you wish to use.
+1. Clone repository.
+2. `cd` into the directory.
 3. Build the binary.
+   - `go build`
 4. Edit your config file to use the new binary.
    - If using DWM execute with the `--dwm=true` flag.
 
@@ -91,6 +92,9 @@ tail = true
    - City: 'wttr.in/~Paris?format=2'
 	 - More information can be found at [wttr.in/:help](https://wttr.in/:help)
 2. Add tweaks to `blocks/wttr.go`
+
+## TODO:
+- Add CLI flag for user input for weather location.
 
 ## License:
 MIT
