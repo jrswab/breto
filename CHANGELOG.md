@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.12.0] - January 12, 2020
 
 ### Added
-- CLI flag to enable the use of Openmoji over Font Awesome for icon set
+- CLI flag to enable the use of emoji over Font Awesome for icon set
+
+### Changed
+- README.md
 
 ## [0.11.0] - January 11, 2020
 

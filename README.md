@@ -11,57 +11,47 @@ Currently tested with DWM, i3wm, tmux, and Polybar.
 - Total disk space left in the binary's present partition.
 - Total battery percentage (off by default)
 - Icons
-#### Current UIs:
+- CLI flags for easier tweaking
+#### Current UIs Tested:
 - DWM
 - i3wm
 - tmux
 - Polybar
 
 #### CLI Flags
-- `-dwm=true` to use in DWM's status bar
 - `-battery=true` to enable battery block
 - `-dateTime=false` to remove the date/time block
-- `-volume=false` to remove volume percentage block
+- `-dwm=true` to use in DWM's status bar
+- `-emoji=true` to enable emoji icons instead of Font Awesome
 - `-ram=false` to remove RAM remaining block
 - `-storage=false` to remove the home directory storage remaining block
 - `-temp=false` to remove the weather block
 - `-tray=false` to remove the "system" tray block
+- `-volume=false` to remove volume percentage block
 
 ### Icons:
 #### To display icons in DWM.
-1. Install Font Awesome 5
+1. Install Font Awesome 5 (or an emoji font)
 2. Set FontAwesome as the second font in `dwm/config.h`
    - eg. `static const char *fonts[] = { "Source Code Pro:size=13", "Font Awesome 5 Free:style=Regular:size=14" };`
+   - if using an emoji font, replace the second font name with the emoji set
 3. Relaunch DWM
 
 #### To display in tmux or i3wm:
-1. Install Font Awesome 5
+1. Install Font Awesome 5 (or an emoji font)
    - Keep in mind that the icons are currently very small.
    - Research in progess.
 
 #### To display in Polybar:
-1. Install Font Awesome 5:
+1. Install Font Awesome 5 (or an emoji font)
 2. Add to your Polybar config:
+   - If not using Font Awesome search for your emoji set with `fc-list` and replace "Font Awesome 5".
 ```
 font-0 = {base font here}
 font-1 = "Font Awesome 5 Free:style=Regular:pixelsize=12;1"
 font-2 = "Font Awesome 5 Free:style=Solid:pixelsize=12;1"
 font-3 = "Font Awesome 5 Brands:pixelsize=12;1"
 ```
-3. If not using Font Awesome 5 search for your version with `fc-list | grep Awesome`.
-
-#### Current Icons:
-- Tempurature: 
-- Disk: 
-- RAM: 
-- Volume:    
-- Syncthing: 
-- Dropbox: 
-- Redshift: 
-- Battery: 
-
-Currently, the icons are much too small to be usefull in Tmux or i3wm without further configuration.
-If you have an easy way to display FontAwesome icons at the same scale as the terminal text please submit a pull request.
 
 ## How To Use:
 1. Open main.go in a text editor.
@@ -101,10 +91,6 @@ tail = true
    - City: 'wttr.in/~Paris?format=2'
 	 - More information can be found at [wttr.in/:help](https://wttr.in/:help)
 2. Add tweaks to `blocks/wttr.go`
-
-## To-Do:
-1. Scale icons in tmux and i3wm
-   - [This Unix Stack Exchange post may help](http://unix.stackexchange.com/questions/49779/ddg#49823)
 
 ## License:
 MIT

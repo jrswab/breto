@@ -4,14 +4,23 @@ import (
 	"encoding/binary"
 	"fmt"
 	"os/exec"
+	"strconv"
 )
+
+func encodeEmoji(unicode string) string {
+	emoji, err := strconv.ParseInt(unicode, 16, 32)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return fmt.Sprintf("%s ", string(emoji))
+}
 
 // Dropbox sends the Dropbox icon when the app is running.
 func Dropbox(emoji bool) (string, error) {
 	// ps ux | awk '/dropbox/ {print $11}' | grep dropbox
 	dbIcon := ""
 	if emoji {
-		dbIcon = "🗄"
+		dbIcon = encodeEmoji("00001F4E5")
 	}
 	dbCmd := "ps ux | gawk '/dropbox/ {print $11}' | grep dropbox"
 	runDbCmd, err := exec.Command("sh", "-c", dbCmd).Output()
@@ -29,7 +38,7 @@ func Dropbox(emoji bool) (string, error) {
 func Redshift(emoji bool) (string, error) {
 	rsIcon := ""
 	if emoji {
-		rsIcon = "💡"
+		rsIcon = encodeEmoji("00001F4A1")
 	}
 	rsCmd := "ps ux | gawk '/redshift/ {print $11}' | grep redshift"
 	runRsCmd, err := exec.Command("sh", "-c", rsCmd).Output()
@@ -47,7 +56,7 @@ func Redshift(emoji bool) (string, error) {
 func Syncthing(emoji bool) (string, error) {
 	syncIcon := ""
 	if emoji {
-		syncIcon = "⬌"
+		syncIcon = encodeEmoji("00000FE0F")
 	}
 	syncCmd := "ps ux | gawk '/syncthing/ {print $11}' | grep syncthing"
 	runSyncCmd, err := exec.Command("sh", "-c", syncCmd).Output()
@@ -69,12 +78,11 @@ func Volume(emoji bool) (string, error) {
 	volIconMid := " "
 	volIconHigh := " "
 
-	// Openmoji:
 	if emoji {
-		volIconMute = "🔇 "
-		volIconLow = "🔈 "
-		volIconMid = "🔉 "
-		volIconHigh = "🔊 "
+		volIconMute = encodeEmoji("00001F507")
+		volIconLow = encodeEmoji("00001F508")
+		volIconMid = encodeEmoji("00001F509")
+		volIconHigh = encodeEmoji("00001F50A")
 	}
 
 	volCmd := "amixer -D pulse sget Master | awk '/Front Right:/ {print $5}' | grep -o '[0-9]*'"
@@ -104,7 +112,7 @@ func Volume(emoji bool) (string, error) {
 // Dir sends the icon when the app is running.
 func Dir(emoji bool) string {
 	if emoji {
-		return "📂 "
+		return encodeEmoji("00001F4C2")
 	}
 	return " "
 }
@@ -112,7 +120,7 @@ func Dir(emoji bool) string {
 // Mem sends the icon when the app is running.
 func Mem(emoji bool) string {
 	if emoji {
-		return "💾 "
+		return encodeEmoji("00001F4BE")
 	}
 	return " "
 }
@@ -120,7 +128,7 @@ func Mem(emoji bool) string {
 // Temp sends the icon when the app is running.
 func Temp(emoji bool) string {
 	if emoji {
-		return "🌡 "
+		return encodeEmoji("00001F321")
 	}
 	return " "
 }
@@ -128,7 +136,7 @@ func Temp(emoji bool) string {
 // Power sends the icon when the app is running.
 func Power(emoji bool) string {
 	if emoji {
-		return "⚡ "
+		return encodeEmoji("000026A1")
 	}
 	return " "
 }
