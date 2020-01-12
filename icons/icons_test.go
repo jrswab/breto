@@ -9,7 +9,7 @@ import (
 // Any icon that simply displays no matter the status is now tested.
 
 func TestDropbox(t *testing.T) {
-	db, err := Dropbox()
+	db, err := Dropbox(false)
 	if err != nil {
 		t.Error(err) //.Error())
 	}
@@ -17,7 +17,7 @@ func TestDropbox(t *testing.T) {
 }
 
 func TestRedshift(t *testing.T) {
-	rs, err := Redshift()
+	rs, err := Redshift(false)
 	if err != nil {
 		t.Error(err)
 	}
@@ -25,7 +25,7 @@ func TestRedshift(t *testing.T) {
 }
 
 func TestVolume(t *testing.T) {
-	vi, err := Volume()
+	vi, err := Volume(false)
 	if err != nil {
 		t.Error(err)
 	}
@@ -33,7 +33,7 @@ func TestVolume(t *testing.T) {
 }
 
 func TestSyncthing(t *testing.T) {
-	sync, err := Syncthing()
+	sync, err := Syncthing(false)
 	if err != nil {
 		t.Error(err) //.Error())
 	}
