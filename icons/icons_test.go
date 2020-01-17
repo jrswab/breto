@@ -24,9 +24,6 @@ func TestEncodeEmoji(t *testing.T) {
 	}
 }
 
-// These tests are for icon functions that rely on other data.
-// Any icon that simply displays no matter the status is now tested.
-
 func TestDropbox(t *testing.T) {
 	db, err := Dropbox(false)
 	if err != nil {

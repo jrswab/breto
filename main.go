@@ -13,28 +13,7 @@ import (
 )
 
 // CLI flag variables
-var dwm, battery, clock, audio, memory, diskSpace, temperature, tray, emoji bool
-
-type info struct {
-	hTime     string
-	weather   string
-	ramFree   string
-	homeSpace string
-	volText   string
-	power     string
-	wttrErr   error
-	ramErr    error
-	homeErr   error
-}
-
-type symbols struct {
-	status    string
-	rShift    string
-	dropbox   string
-	volIcon   string
-	syncthing string
-	bolt      string
-}
+var dwmIsSet, batteryIsSet, clock, audio, memory, diskSpace, temperature, tray, emoji bool
 
 type batInfo struct {
 	passed   float64
@@ -43,22 +22,21 @@ type batInfo struct {
 
 func init() {
 	// Setup and define cli flags
-	flag.BoolVar(&dwm, "dwm", false, "Used to enable output for DWM's status bar.\n Example: --dwm=true")
-	flag.BoolVar(&battery, "battery", false, "Used to enable battery module.\n Example: --battery=true")
+	flag.BoolVar(&dwmIsSet, "dwm", false, "Used to enable output for DWM's status bar.\n Example: --dwm=true")
+	flag.BoolVar(&batteryIsSet, "battery", false, "Used to enable battery module.\n Example: --battery=true")
 	flag.BoolVar(&clock, "dateTime", true, "Used to disable the date and time module.\n Example: --dateTime=false")
 	flag.BoolVar(&audio, "volume", true, "Used to disable the volume module.\n Example: --volume=false")
 	flag.BoolVar(&memory, "ram", true, "Used to disable the RAM module.\n Example: --ram=false")
 	flag.BoolVar(&diskSpace, "storage", true, "Used to disable the home directory storage module.\n Example: --storage=false")
 	flag.BoolVar(&temperature, "temp", true, "Used to disable the temperature module.\n Example: --temp=false")
 	flag.BoolVar(&tray, "tray", true, "Used to disable the custom tray module.\n Example: --tray=false")
-	flag.BoolVar(&emoji, "emoji", false, "Used to enable Openmoji icons instead of Awosome Font.\n Example: --emoji=true")
+	flag.BoolVar(&emoji, "emoji", false, "Used to enable emoji icons instead of Awosome Font.\n Example: --emoji=true")
 }
 
 func main() {
 	flag.Parse()
 
-	stats := info{}
-	ico := symbols{}
+	stats := blocks.Info{}
 	baty := batInfo{}
 
 	// Each Go routine has it's own timer to delay the execution of the command.
@@ -85,60 +63,61 @@ func main() {
 	ticker := time.NewTicker(time.Second)
 	for range ticker.C {
 		// add year & seconds with "Jan 02, 2006 15:04:05"
-		stats.hTime = time.Now().Format("Jan 02 15:04")
+		hTime := time.Now().Format("Jan 02 15:04")
 
-		if battery {
+		if batteryIsSet {
 			baty.passed = time.Since(start).Seconds()
 			baty.fiveMins = math.Floor(math.Remainder(baty.passed, 300))
 		}
 
 		select { // updates the go routine channels as they send data
-		case stats.weather = <-cWttr:
-		case stats.wttrErr = <-eWttr:
-			log.Println(stats.wttrErr.Error())
-		case stats.ramFree = <-cRAM:
-		case stats.ramErr = <-eRAM:
-			log.Println(stats.ramErr.Error())
-		case stats.homeSpace = <-cHomeDisk:
-		case stats.homeErr = <-eHomeDisk:
-			log.Println(stats.homeErr.Error())
+		case stats.Weather = <-cWttr:
+		case stats.WttrErr = <-eWttr:
+			log.Println(stats.WttrErr.Error())
+			stats.Weather = "N/A"
+		case stats.RamFree = <-cRAM:
+		case stats.RamErr = <-eRAM:
+			log.Println(stats.RamErr.Error())
+		case stats.HomeSpace = <-cHomeDisk:
+		case stats.HomeErr = <-eHomeDisk:
+			log.Println(stats.HomeErr.Error())
 		default:
 		}
 
 		// Status bar information as defined by the CLI flags.
 		status := "" // reset status on every run.
 		if temperature {
-			status = fmt.Sprintf("%s %s%s ", status, icons.Temp(emoji), stats.weather)
+			status = fmt.Sprintf("%s %s%s ", status, icons.Temp(emoji), stats.Weather)
 		}
 		if diskSpace {
-			status = fmt.Sprintf("%s %s%s ", status, icons.Dir(emoji), stats.homeSpace)
+			status = fmt.Sprintf("%s %s%s ", status, icons.Dir(emoji), stats.HomeSpace)
 		}
 		if memory {
-			status = fmt.Sprintf("%s %s%s ", status, icons.Mem(emoji), stats.ramFree)
+			status = fmt.Sprintf("%s %s%s ", status, icons.Mem(emoji), stats.RamFree)
 		}
 		if audio {
-			stats.volText, _ = blocks.VolumeText()
-			ico.volIcon, _ = icons.Volume(emoji)
-			status = fmt.Sprintf("%s %s%s ", status, ico.volIcon, stats.volText)
+			volText, _ := blocks.VolumeText()
+			volIcon, _ := icons.Volume(emoji)
+			status = fmt.Sprintf("%s %s%s ", status, volIcon, volText)
 		}
-		if battery {
+		if batteryIsSet {
 			if baty.fiveMins == 0 || baty.passed < 10 {
-				stats.power, _ = blocks.Battery()
+				stats.Power, _ = blocks.Battery()
 			}
-			status = fmt.Sprintf("%s %s%s ", status, icons.Power(emoji), stats.power)
+			status = fmt.Sprintf("%s %s%s ", status, icons.Power(emoji), stats.Power)
 		}
 		if clock {
-			status = fmt.Sprintf("%s %s ", status, stats.hTime)
+			status = fmt.Sprintf("%s %s ", status, hTime)
 		}
 		if tray {
-			ico.rShift, _ = icons.Redshift(emoji)
-			ico.dropbox, _ = icons.Dropbox(emoji)
-			ico.syncthing, _ = icons.Syncthing(emoji)
-			status = fmt.Sprintf("%s %s%s%s", status, ico.dropbox, ico.syncthing, ico.rShift)
+			redShift, _ := icons.Redshift(emoji)
+			dropbox, _ := icons.Dropbox(emoji)
+			syncthing, _ := icons.Syncthing(emoji)
+			status = fmt.Sprintf("%s %s%s%s", status, dropbox, syncthing, redShift)
 		}
 
 		// Output methods as specified by CLI flags.
-		if dwm {
+		if dwmIsSet {
 			ui.Dwm(status)
 		} else {
 			ui.Default(status)
