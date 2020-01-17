@@ -5,6 +5,25 @@ import (
 	"testing"
 )
 
+func TestEncodeEmoji(t *testing.T) {
+	var emojis = []struct {
+		input    string
+		expected string
+	}{
+		{"00001F4E5", "📥 "},
+		{"00001F4A1", "💡 "},
+		{"000002194", "↔ "},
+	}
+
+	for _, test := range emojis {
+		output := encodeEmoji(test.input)
+		if output != test.expected {
+			errMessage := fmt.Sprintf("Expected %s, got %s", test.expected, output)
+			t.Error(errMessage)
+		}
+	}
+}
+
 // These tests are for icon functions that rely on other data.
 // Any icon that simply displays no matter the status is now tested.
 
