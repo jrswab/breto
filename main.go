@@ -13,7 +13,17 @@ import (
 )
 
 // CLI flag variables
-var dwmIsSet, batteryIsSet, clock, audio, memory, diskSpace, temperature, tray, emoji bool
+var (
+	dwmIsEnabled,
+	batteryIsEnabled,
+	timeIsEnabled,
+	volumeIsEnabled,
+	ramIsEnabled,
+	diskSpaceIsEnabled,
+	temperatureIsEnabled,
+	trayIsEnabled,
+	emoji bool
+)
 
 type batInfo struct {
 	passed   float64
@@ -22,14 +32,14 @@ type batInfo struct {
 
 func init() {
 	// Setup and define cli flags
-	flag.BoolVar(&dwmIsSet, "dwm", false, "Used to enable output for DWM's status bar.\n Example: --dwm=true")
-	flag.BoolVar(&batteryIsSet, "battery", false, "Used to enable battery module.\n Example: --battery=true")
-	flag.BoolVar(&clock, "dateTime", true, "Used to disable the date and time module.\n Example: --dateTime=false")
-	flag.BoolVar(&audio, "volume", true, "Used to disable the volume module.\n Example: --volume=false")
-	flag.BoolVar(&memory, "ram", true, "Used to disable the RAM module.\n Example: --ram=false")
-	flag.BoolVar(&diskSpace, "storage", true, "Used to disable the home directory storage module.\n Example: --storage=false")
-	flag.BoolVar(&temperature, "temp", true, "Used to disable the temperature module.\n Example: --temp=false")
-	flag.BoolVar(&tray, "tray", true, "Used to disable the custom tray module.\n Example: --tray=false")
+	flag.BoolVar(&dwmIsEnabled, "dwm", false, "Used to enable output for DWM's status bar.\n Example: --dwm=true")
+	flag.BoolVar(&batteryIsEnabled, "battery", false, "Used to enable battery module.\n Example: --battery=true")
+	flag.BoolVar(&timeIsEnabled, "dateTime", true, "Used to disable the date and time module.\n Example: --dateTime=false")
+	flag.BoolVar(&volumeIsEnabled, "volume", true, "Used to disable the volume module.\n Example: --volume=false")
+	flag.BoolVar(&ramIsEnabled, "ram", true, "Used to disable the RAM module.\n Example: --ram=false")
+	flag.BoolVar(&diskSpaceIsEnabled, "storage", true, "Used to disable the home directory storage module.\n Example: --storage=false")
+	flag.BoolVar(&temperatureIsEnabled, "temp", true, "Used to disable the temperatureIsEnabled module.\n Example: --temp=false")
+	flag.BoolVar(&trayIsEnabled, "trayIsEnabled", true, "Used to disable the custom trayIsEnabled module.\n Example: --trayIsEnabled=false")
 	flag.BoolVar(&emoji, "emoji", false, "Used to enable emoji icons instead of Awosome Font.\n Example: --emoji=true")
 }
 
@@ -43,30 +53,30 @@ func main() {
 	// A Go routine will run unless it's CLI flag is set to false.
 	cWttr := make(chan string)
 	eWttr := make(chan error)
-	if temperature {
+	if temperatureIsEnabled {
 		go blocks.Wttr(cWttr, eWttr)
 	}
 
 	cRAM := make(chan string)
 	eRAM := make(chan error)
-	if memory {
+	if ramIsEnabled {
 		go blocks.FreeRam(cRAM, eRAM)
 	}
 
 	cHomeDisk := make(chan string)
 	eHomeDisk := make(chan error)
-	if diskSpace {
+	if diskSpaceIsEnabled {
 		go blocks.HomeDisk(cHomeDisk, eHomeDisk)
 	}
 
-	start := time.Now() // for batter time math
+	batteryStart := time.Now()
 	ticker := time.NewTicker(time.Second)
 	for range ticker.C {
 		// add year & seconds with "Jan 02, 2006 15:04:05"
 		hTime := time.Now().Format("Jan 02 15:04")
 
-		if batteryIsSet {
-			baty.passed = time.Since(start).Seconds()
+		if batteryIsEnabled {
+			baty.passed = time.Since(batteryStart).Seconds()
 			baty.fiveMins = math.Floor(math.Remainder(baty.passed, 300))
 		}
 
@@ -86,30 +96,30 @@ func main() {
 
 		// Status bar information as defined by the CLI flags.
 		status := "" // reset status on every run.
-		if temperature {
+		if temperatureIsEnabled {
 			status = fmt.Sprintf("%s %s%s ", status, icons.Temp(emoji), stats.Weather)
 		}
-		if diskSpace {
+		if diskSpaceIsEnabled {
 			status = fmt.Sprintf("%s %s%s ", status, icons.Dir(emoji), stats.HomeSpace)
 		}
-		if memory {
+		if ramIsEnabled {
 			status = fmt.Sprintf("%s %s%s ", status, icons.Mem(emoji), stats.RamFree)
 		}
-		if audio {
+		if volumeIsEnabled {
 			volText, _ := blocks.VolumeText()
 			volIcon, _ := icons.Volume(emoji)
 			status = fmt.Sprintf("%s %s%s ", status, volIcon, volText)
 		}
-		if batteryIsSet {
+		if batteryIsEnabled {
 			if baty.fiveMins == 0 || baty.passed < 10 {
 				stats.Power, _ = blocks.Battery()
 			}
 			status = fmt.Sprintf("%s %s%s ", status, icons.Power(emoji), stats.Power)
 		}
-		if clock {
+		if timeIsEnabled {
 			status = fmt.Sprintf("%s %s ", status, hTime)
 		}
-		if tray {
+		if trayIsEnabled {
 			redShift, _ := icons.Redshift(emoji)
 			dropbox, _ := icons.Dropbox(emoji)
 			syncthing, _ := icons.Syncthing(emoji)
@@ -117,7 +127,7 @@ func main() {
 		}
 
 		// Output methods as specified by CLI flags.
-		if dwmIsSet {
+		if dwmIsEnabled {
 			ui.Dwm(status)
 		} else {
 			ui.Default(status)
