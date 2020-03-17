@@ -1,7 +1,6 @@
 package icons
 
 import (
-	"encoding/binary"
 	"fmt"
 	"os/exec"
 	"strconv"
@@ -85,11 +84,14 @@ func Volume(emoji bool) (string, error) {
 		volIconHigh = encodeEmoji("00001F50A")
 	}
 
-	volCmd := "amixer -D pulse sget Master | awk '/Front Right:/ {print $5}' | grep -o '[0-9]*'"
+	volCmd := "pamixer --get-volume | tr -d '\n'"
 	runVolCmd, err := exec.Command("sh", "-c", volCmd).Output()
-	volValue := binary.LittleEndian.Uint16(runVolCmd)
-
 	if err != nil && err.Error() != "exit status 1" {
+		return "", err
+	}
+
+	volValue, err := strconv.Atoi(string(runVolCmd))
+	if err != nil {
 		return "", err
 	}
 

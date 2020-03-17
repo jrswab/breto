@@ -10,9 +10,9 @@ Currently tested with DWM, i3wm, tmux, and Polybar.
 - Weather via wttr.in
 - Total RAM not used
 - Total disk space left in the binary's present partition.
+- Audio volume percentage (pamixer needs installed)
 - Total battery percentage (off by default)
 - Icons
-- CLI flags for easier tweaking
 #### Current UIs Tested:
 - DWM
 - i3wm

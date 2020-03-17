@@ -54,6 +54,39 @@ func init() {
 	flag.BoolVar(&emoji, "emoji", false, "Used to enable Openmoji icons instead of Awosome Font.\n Example: --emoji=true")
 }
 
+func formatOutput(status string, stats info, ico symbols, baty batInfo) string {
+	if temperature {
+		status = fmt.Sprintf("%s %s%s ", status, icons.Temp(emoji), stats.weather)
+	}
+	if diskSpace {
+		status = fmt.Sprintf("%s %s%s ", status, icons.Dir(emoji), stats.homeSpace)
+	}
+	if memory {
+		status = fmt.Sprintf("%s %s%s ", status, icons.Mem(emoji), stats.ramFree)
+	}
+	if audio {
+		stats.volText, _ = blocks.VolumeText()
+		ico.volIcon, _ = icons.Volume(emoji)
+		status = fmt.Sprintf("%s %s%s ", status, ico.volIcon, stats.volText)
+	}
+	if battery {
+		if baty.fiveMins == 0 || baty.passed < 10 {
+			stats.power, _ = blocks.Battery()
+		}
+		status = fmt.Sprintf("%s %s%s ", status, icons.Power(emoji), stats.power)
+	}
+	if clock {
+		status = fmt.Sprintf("%s %s ", status, stats.hTime)
+	}
+	if tray {
+		ico.rShift, _ = icons.Redshift(emoji)
+		ico.dropbox, _ = icons.Dropbox(emoji)
+		ico.syncthing, _ = icons.Syncthing(emoji)
+		status = fmt.Sprintf("%s %s%s%s", status, ico.dropbox, ico.syncthing, ico.rShift)
+	}
+	return status
+}
+
 func main() {
 	flag.Parse()
 
@@ -107,41 +140,13 @@ func main() {
 
 		// Status bar information as defined by the CLI flags.
 		status := "" // reset status on every run.
-		if temperature {
-			status = fmt.Sprintf("%s %s%s ", status, icons.Temp(emoji), stats.weather)
-		}
-		if diskSpace {
-			status = fmt.Sprintf("%s %s%s ", status, icons.Dir(emoji), stats.homeSpace)
-		}
-		if memory {
-			status = fmt.Sprintf("%s %s%s ", status, icons.Mem(emoji), stats.ramFree)
-		}
-		if audio {
-			stats.volText, _ = blocks.VolumeText()
-			ico.volIcon, _ = icons.Volume(emoji)
-			status = fmt.Sprintf("%s %s%s ", status, ico.volIcon, stats.volText)
-		}
-		if battery {
-			if baty.fiveMins == 0 || baty.passed < 10 {
-				stats.power, _ = blocks.Battery()
-			}
-			status = fmt.Sprintf("%s %s%s ", status, icons.Power(emoji), stats.power)
-		}
-		if clock {
-			status = fmt.Sprintf("%s %s ", status, stats.hTime)
-		}
-		if tray {
-			ico.rShift, _ = icons.Redshift(emoji)
-			ico.dropbox, _ = icons.Dropbox(emoji)
-			ico.syncthing, _ = icons.Syncthing(emoji)
-			status = fmt.Sprintf("%s %s%s%s", status, ico.dropbox, ico.syncthing, ico.rShift)
-		}
+		finalStatus := formatOutput(status, stats, ico, baty)
 
 		// Output methods as specified by CLI flags.
 		if dwm {
-			ui.Dwm(status)
+			ui.Dwm(finalStatus)
 		} else {
-			ui.Default(status)
+			ui.Default(finalStatus)
 		}
 	}
 }
