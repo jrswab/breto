@@ -7,10 +7,10 @@ import (
 	"math"
 	"time"
 
-	"git.swab.dev/breto/blocks"
-	"git.swab.dev/breto/icons"
-	"git.swab.dev/breto/stats"
-	"git.swab.dev/breto/ui"
+	"git.swab.dev/breto.git/blocks"
+	"git.swab.dev/breto.git/icons"
+	"git.swab.dev/breto.git/stats"
+	"git.swab.dev/breto.git/ui"
 )
 
 // CLI flag variables
@@ -31,33 +31,33 @@ func init() {
 
 func formatOutput(status string, stats *stats.Info, ico *icons.Symbols, baty batInfo) string {
 	if temperature {
-		status = fmt.Sprintf("%s %s%s ", status, icons.Temp(emoji), stats.weather)
+		status = fmt.Sprintf("%s %s%s ", status, icons.Temp(emoji), stats.Weather)
 	}
 	if diskSpace {
-		status = fmt.Sprintf("%s %s%s ", status, icons.Dir(emoji), stats.homeSpace)
+		status = fmt.Sprintf("%s %s%s ", status, icons.Dir(emoji), stats.HomeSpace)
 	}
 	if memory {
-		status = fmt.Sprintf("%s %s%s ", status, icons.Mem(emoji), stats.ramFree)
+		status = fmt.Sprintf("%s %s%s ", status, icons.Mem(emoji), stats.RamFree)
 	}
 	if audio {
-		stats.volText, _ = blocks.VolumeText()
-		ico.volIcon, _ = icons.Volume(emoji)
-		status = fmt.Sprintf("%s %s%s ", status, ico.volIcon, stats.volText)
+		stats.VolText, _ = blocks.VolumeText()
+		ico.VolIcon, _ = icons.Volume(emoji)
+		status = fmt.Sprintf("%s %s%s ", status, ico.VolIcon, stats.VolText)
 	}
 	if battery {
 		if baty.fiveMins == 0 || baty.passed < 10 {
-			stats.power, _ = blocks.Battery()
+			stats.Power, _ = blocks.Battery()
 		}
-		status = fmt.Sprintf("%s %s%s ", status, icons.Power(emoji), stats.power)
+		status = fmt.Sprintf("%s %s%s ", status, icons.Power(emoji), stats.Power)
 	}
 	if clock {
-		status = fmt.Sprintf("%s %s ", status, stats.hTime)
+		status = fmt.Sprintf("%s %s ", status, stats.HTime)
 	}
 	if tray {
-		ico.rShift, _ = icons.Redshift(emoji)
-		ico.dropbox, _ = icons.Dropbox(emoji)
-		ico.syncthing, _ = icons.Syncthing(emoji)
-		status = fmt.Sprintf("%s %s%s%s", status, ico.dropbox, ico.syncthing, ico.rShift)
+		ico.RShift, _ = icons.Redshift(emoji)
+		ico.Dropbox, _ = icons.Dropbox(emoji)
+		ico.Syncthing, _ = icons.Syncthing(emoji)
+		status = fmt.Sprintf("%s %s%s%s", status, ico.Dropbox, ico.Syncthing, ico.RShift)
 	}
 	return status
 }
@@ -100,7 +100,7 @@ func main() {
 	ticker := time.NewTicker(time.Second)
 	for range ticker.C {
 		// add year & seconds with "Jan 02, 2006 15:04:05"
-		stats.hTime = time.Now().Format("Jan 02 15:04")
+		stats.HTime = time.Now().Format("Jan 02 15:04")
 
 		if battery {
 			baty.passed = time.Since(start).Seconds()
@@ -108,15 +108,15 @@ func main() {
 		}
 
 		select { // updates the go routine channels as they send data
-		case stats.weather = <-cWttr:
-		case stats.wttrErr = <-eWttr:
-			log.Println(stats.wttrErr.Error())
-		case stats.ramFree = <-cRAM:
-		case stats.ramErr = <-eRAM:
-			log.Println(stats.ramErr.Error())
-		case stats.homeSpace = <-cHomeDisk:
-		case stats.homeErr = <-eHomeDisk:
-			log.Println(stats.homeErr.Error())
+		case stats.Weather = <-cWttr:
+		case stats.WttrErr = <-eWttr:
+			log.Println(stats.WttrErr.Error())
+		case stats.RamFree = <-cRAM:
+		case stats.RamErr = <-eRAM:
+			log.Println(stats.RamErr.Error())
+		case stats.HomeSpace = <-cHomeDisk:
+		case stats.HomeErr = <-eHomeDisk:
+			log.Println(stats.HomeErr.Error())
 		default:
 		}
 

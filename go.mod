@@ -1,3 +1,3 @@
-module github.com/jrswab/breto
+module git.swab.dev/breto.git
 
 go 1.12
