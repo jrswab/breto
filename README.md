@@ -1,3 +1,7 @@
+All future development of this repository is happening at [git.sr.ht/~jrswab/breto](https://git.sr.ht/~jrswab/breto)
+
+---
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/jrswab/breto)](https://goreportcard.com/report/github.com/jrswab/breto)
 # Breto
 A status bar written in Go.
