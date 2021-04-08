@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - stats package for info struct
+- format package for formatting text and defining flags
 
 ## [0.12.0] - January 12, 2020
 

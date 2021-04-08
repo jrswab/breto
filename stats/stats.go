@@ -12,3 +12,8 @@ type Info struct {
 	RamErr  error
 	HomeErr error
 }
+
+type Battery struct {
+	Passed   float64
+	FiveMins float64
+}
