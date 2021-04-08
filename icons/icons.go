@@ -6,6 +6,13 @@ import (
 	"strconv"
 )
 
+type Symbols struct {
+	RShift    string
+	Dropbox   string
+	VolIcon   string
+	Syncthing string
+}
+
 func encodeEmoji(unicode string) string {
 	emoji, err := strconv.ParseInt(unicode, 16, 32)
 	if err != nil {

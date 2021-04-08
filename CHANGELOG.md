@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- switch from github to repo for imports
+
+### Added
+- stats package for info struct
 
 ## [0.12.0] - January 12, 2020
 

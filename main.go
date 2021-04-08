@@ -7,39 +7,14 @@ import (
 	"math"
 	"time"
 
-	"github.com/jrswab/breto/blocks"
-	"github.com/jrswab/breto/icons"
-	"github.com/jrswab/breto/ui"
+	"git.swab.dev/breto/blocks"
+	"git.swab.dev/breto/icons"
+	"git.swab.dev/breto/stats"
+	"git.swab.dev/breto/ui"
 )
 
 // CLI flag variables
 var dwm, battery, clock, audio, memory, diskSpace, temperature, tray, emoji bool
-
-type info struct {
-	hTime     string
-	weather   string
-	ramFree   string
-	homeSpace string
-	volText   string
-	power     string
-	wttrErr   error
-	ramErr    error
-	homeErr   error
-}
-
-type symbols struct {
-	status    string
-	rShift    string
-	dropbox   string
-	volIcon   string
-	syncthing string
-	bolt      string
-}
-
-type batInfo struct {
-	passed   float64
-	fiveMins float64
-}
 
 func init() {
 	// Setup and define cli flags
@@ -51,10 +26,10 @@ func init() {
 	flag.BoolVar(&diskSpace, "storage", true, "Used to disable the home directory storage module.\n Example: --storage=false")
 	flag.BoolVar(&temperature, "temp", true, "Used to disable the temperature module.\n Example: --temp=false")
 	flag.BoolVar(&tray, "tray", true, "Used to disable the custom tray module.\n Example: --tray=false")
-	flag.BoolVar(&emoji, "emoji", false, "Used to enable Openmoji icons instead of Awosome Font.\n Example: --emoji=true")
+	flag.BoolVar(&emoji, "emoji", false, "Used to enable Openmoji icons instead of Awesome Font.\n Example: --emoji=true")
 }
 
-func formatOutput(status string, stats info, ico symbols, baty batInfo) string {
+func formatOutput(status string, stats *stats.Info, ico *icons.Symbols, baty batInfo) string {
 	if temperature {
 		status = fmt.Sprintf("%s %s%s ", status, icons.Temp(emoji), stats.weather)
 	}
@@ -87,29 +62,36 @@ func formatOutput(status string, stats info, ico symbols, baty batInfo) string {
 	return status
 }
 
+type batInfo struct {
+	passed   float64
+	fiveMins float64
+}
+
 func main() {
 	flag.Parse()
 
-	stats := info{}
-	ico := symbols{}
-	baty := batInfo{}
+	var (
+		stats     = new(stats.Info)
+		ico       = new(icons.Symbols)
+		baty      = batInfo{}
+		cWttr     = make(chan string)
+		eWttr     = make(chan error)
+		cRAM      = make(chan string)
+		eRAM      = make(chan error)
+		cHomeDisk = make(chan string)
+		eHomeDisk = make(chan error)
+	)
 
 	// Each Go routine has it's own timer to delay the execution of the command.
 	// A Go routine will run unless it's CLI flag is set to false.
-	cWttr := make(chan string)
-	eWttr := make(chan error)
 	if temperature {
 		go blocks.Wttr(cWttr, eWttr)
 	}
 
-	cRAM := make(chan string)
-	eRAM := make(chan error)
 	if memory {
 		go blocks.FreeRam(cRAM, eRAM)
 	}
 
-	cHomeDisk := make(chan string)
-	eHomeDisk := make(chan error)
 	if diskSpace {
 		go blocks.HomeDisk(cHomeDisk, eHomeDisk)
 	}
@@ -139,8 +121,8 @@ func main() {
 		}
 
 		// Status bar information as defined by the CLI flags.
-		status := "" // reset status on every run.
-		finalStatus := formatOutput(status, stats, ico, baty)
+		// reset status on every run.
+		finalStatus := formatOutput("", stats, ico, baty)
 
 		// Output methods as specified by CLI flags.
 		if dwm {
