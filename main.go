@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"math"
+	"os"
+	"sync"
 	"time"
 
 	"git.swab.dev/breto.git/blocks"
@@ -54,28 +56,49 @@ func main() {
 			bat.FiveMins = math.Floor(math.Remainder(bat.Passed, 300))
 		}
 
+		var mutex = &sync.Mutex{}
 		select { // updates the go routine channels as they send data
 		case info.Weather = <-cWttr:
 		case info.WttrErr = <-eWttr:
-			log.Println(info.WttrErr.Error())
+			writeToLog(info.WttrErr.Error(), mutex)
 		case info.RamFree = <-cRAM:
 		case info.RamErr = <-eRAM:
-			log.Println(info.RamErr.Error())
+			writeToLog(info.RamErr.Error(), mutex)
 		case info.HomeSpace = <-cHomeDisk:
 		case info.HomeErr = <-eHomeDisk:
-			log.Println(info.HomeErr.Error())
+			writeToLog(info.HomeErr.Error(), mutex)
 		default:
 		}
 
 		// Status bar information as defined by the CLI flags.
 		// reset status on every run.
-		finalStatus := o.Output("", info, ico, bat)
+		status := o.Output("", info, ico, bat)
 
 		// Output methods as specified by CLI flags.
 		if o.Dwm {
-			ui.Dwm(finalStatus)
+			ui.Dwm(status)
 		} else {
-			ui.Default(finalStatus)
+			ui.Default(status)
 		}
 	}
+}
+
+func writeToLog(errMsg string, mutex *sync.Mutex) {
+	mutex.Lock()
+	cache := os.Getenv("XDG_CACHE_HOME")
+	if cache == "" {
+		cache = "."
+	}
+
+	path := fmt.Spritf("%s/breto.log", cache)
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Println(err)
+	}
+
+	defer mutex.Unlock()
+	defer f.Close()
+
+	logger := log.New(f, "prefix", log.LstdFlags)
+	logger.Println(errMsg)
 }
