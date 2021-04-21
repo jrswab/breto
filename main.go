@@ -27,6 +27,7 @@ func main() {
 		eRAM      = make(chan error)
 		cHomeDisk = make(chan string)
 		eHomeDisk = make(chan error)
+		mutex     = &sync.Mutex{}
 	)
 
 	o := opt.ParseFlags()
@@ -56,7 +57,6 @@ func main() {
 			bat.FiveMins = math.Floor(math.Remainder(bat.Passed, 300))
 		}
 
-		var mutex = &sync.Mutex{}
 		select { // updates the go routine channels as they send data
 		case info.Weather = <-cWttr:
 		case info.WttrErr = <-eWttr:
@@ -85,6 +85,8 @@ func main() {
 
 func writeToLog(errMsg string, mutex *sync.Mutex) {
 	mutex.Lock()
+	defer mutex.Unlock()
+
 	cache := os.Getenv("XDG_CACHE_HOME")
 	if cache == "" {
 		cache = "."
@@ -95,8 +97,6 @@ func writeToLog(errMsg string, mutex *sync.Mutex) {
 	if err != nil {
 		log.Println(err)
 	}
-
-	defer mutex.Unlock()
 	defer f.Close()
 
 	logger := log.New(f, "prefix", log.LstdFlags)
