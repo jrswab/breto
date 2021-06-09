@@ -6,6 +6,7 @@ import (
 	"os"
 	"sync"
 	"time"
+	"fmt"
 
 	"git.swab.dev/breto.git/blocks"
 	"git.swab.dev/breto.git/format"
@@ -92,7 +93,7 @@ func writeToLog(errMsg string, mutex *sync.Mutex) {
 		cache = "."
 	}
 
-	path := fmt.Spritf("%s/breto.log", cache)
+	path := fmt.Sprintf("%s/breto.log", cache)
 	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Println(err)
