@@ -11,7 +11,7 @@ import (
 
 // Wttr gets the weather of the computer's general location.
 // Specify city or area code: "wttr.in/~15222" or "wttr.in/~Pittsburgh"
-func Wttr(cWttr chan string, eWttr chan error) {
+func Wttr(cWttr chan string, eWttr chan error) { //, useOWM bool) {
 	var passed, hour float64
 	var data, weather string
 
@@ -45,3 +45,12 @@ func Wttr(cWttr chan string, eWttr chan error) {
 		}
 	}
 }
+
+/*
+func openWeatherMap(apikey string) string {
+	resp, err := http.Get("")
+	if err !=  nil {
+		eWtter <- err
+	}
+}
+*/

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"math"
 	"os"
 	"sync"
 	"time"
-	"fmt"
 
 	"git.swab.dev/breto.git/blocks"
 	"git.swab.dev/breto.git/format"
@@ -53,9 +53,22 @@ func main() {
 		// add year & seconds with "Jan 02, 2006 15:04:05"
 		info.HTime = time.Now().Format("Jan 02 15:04")
 
+		if o.CPU {
+			var err error
+			info.CPUMHz, err = blocks.CPUMHz()
+			if err != nil {
+				writeToLog(fmt.Sprintf("%s", err), mutex)
+			}
+
+			info.CPUTemp, err = blocks.CPUTemp()
+			if err != nil {
+				writeToLog(fmt.Sprintf("%s", err), mutex)
+			}
+		}
+
 		if o.Battery {
 			bat.Passed = time.Since(start).Seconds()
-			bat.FiveMins = math.Floor(math.Remainder(bat.Passed, 300))
+			bat.Minute = math.Floor(math.Remainder(bat.Passed, 60))
 		}
 
 		select { // updates the go routine channels as they send data
@@ -76,10 +89,9 @@ func main() {
 		status := o.Output("", info, ico, bat)
 
 		// Output methods as specified by CLI flags.
+		ui.Default(status)
 		if o.Dwm {
 			ui.Dwm(status)
-		} else {
-			ui.Default(status)
 		}
 	}
 }
@@ -100,6 +112,6 @@ func writeToLog(errMsg string, mutex *sync.Mutex) {
 	}
 	defer f.Close()
 
-	logger := log.New(f, "prefix", log.LstdFlags)
+	logger := log.New(f, "[breto] ", log.LstdFlags)
 	logger.Println(errMsg)
 }

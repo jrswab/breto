@@ -6,14 +6,13 @@ import (
 	"strings"
 )
 
-// VolumeText sends back the current volume percent.
-func VolumeText() (string, error) {
-	volCmd := "amixer -D pulse sget Master | awk '/Front Right:/ {print $5}' | grep -o '[0-9].'"
+// Volume sends back the current volume percent.
+func Volume(emoji bool) (string, error) {
+	volCmd := "pulsemixer --get-volume | awk '{print $1}'"
 	runVol, err := exec.Command("sh", "-c", volCmd).Output()
 	if err != nil {
 		return "", err
 	}
 
-	percent := "%"
-	return fmt.Sprintf("%s%s", strings.TrimSpace(string(runVol)), percent), nil
+	return fmt.Sprintf("%s%s", strings.TrimSpace(string(runVol)), "%"), nil
 }

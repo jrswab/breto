@@ -3,9 +3,15 @@
 A status bar written in Go.
 Currently tested with DWM, i3wm, tmux, and Polybar.
 
+## Dependencies:
+- pulsemixer
+- lm_sensors
+- bc
+
 ## Current Features:
 ### Master Branch:
 #### Blocks:
+- CPU MHz & tempurature
 - Date & Time
 - Weather via wttr.in
 - Total RAM not used
@@ -13,6 +19,7 @@ Currently tested with DWM, i3wm, tmux, and Polybar.
 - Audio volume percentage (pamixer needs installed)
 - Total battery percentage (off by default)
 - Icons
+
 #### Current UIs Tested:
 - DWM
 - i3wm

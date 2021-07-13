@@ -3,6 +3,8 @@ package stats
 type Info struct {
 	HTime     string
 	Weather   string
+	CPUMHz    string
+	CPUTemp   string
 	RamFree   string
 	HomeSpace string
 	VolText   string
@@ -14,6 +16,6 @@ type Info struct {
 }
 
 type Battery struct {
-	Passed   float64
-	FiveMins float64
+	Passed float64
+	Minute float64
 }

@@ -35,7 +35,7 @@ func Dropbox(emoji bool) (string, error) {
 		return "", err
 	}
 	if string(runDbCmd) != "" {
-		return fmt.Sprintf("%s", dbIcon), nil
+		return dbIcon, nil
 	}
 	return "", nil
 }
@@ -53,7 +53,7 @@ func Redshift(emoji bool) (string, error) {
 		return "", err
 	}
 	if string(runRsCmd) != "" {
-		return fmt.Sprintf("%s", rsIcon), nil
+		return rsIcon, nil
 	}
 	return "", nil
 }
@@ -71,13 +71,13 @@ func Syncthing(emoji bool) (string, error) {
 		return "", err
 	}
 	if string(runSyncCmd) != "" {
-		return fmt.Sprintf("%s", syncIcon), nil
+		return syncIcon, nil
 	}
 	return "", nil
 }
 
 // Volume sends the icon when the app is running.
-func Volume(emoji bool) (string, error) {
+func VolumeDynamic(emoji bool) (string, error) {
 	// Font Awesome:
 	volIconMute := " "
 	volIconLow := " "
@@ -91,7 +91,7 @@ func Volume(emoji bool) (string, error) {
 		volIconHigh = encodeEmoji("00001F50A")
 	}
 
-	volCmd := "pamixer --get-volume | tr -d '\n'"
+	volCmd := "pulsemixer --get-volume | awk '{print $1}'"
 	runVolCmd, err := exec.Command("sh", "-c", volCmd).Output()
 	if err != nil && err.Error() != "exit status 1" {
 		return "", err
@@ -104,19 +104,26 @@ func Volume(emoji bool) (string, error) {
 
 	switch {
 	case volValue == 0:
-		return fmt.Sprintf("%s", volIconMute), nil
+		return volIconMute, nil
 	case volValue < 50:
-		return fmt.Sprintf("%s", volIconLow), nil
+		return volIconLow, nil
 	case volValue >= 50 && volValue <= 74:
-		return fmt.Sprintf("%s", volIconMid), nil
+		return volIconMid, nil
 	case volValue >= 75:
-		return fmt.Sprintf("%s", volIconHigh), nil
+		return volIconHigh, nil
 	default:
 		return "", nil
 	}
 }
 
 // The following have no checks that need to be made
+func VolumeSingleIcon(emoji bool) string {
+	if emoji {
+		return encodeEmoji("00001F50A")
+	}
+	// Font Awesome:
+	return " "
+}
 
 // Dir sends the icon when the app is running.
 func Dir(emoji bool) string {
@@ -131,7 +138,7 @@ func Mem(emoji bool) string {
 	if emoji {
 		return encodeEmoji("00001F4BE")
 	}
-	return " "
+	return "︁ "
 }
 
 // Temp sends the icon when the app is running.
@@ -148,4 +155,12 @@ func Power(emoji bool) string {
 		return encodeEmoji("000026A1")
 	}
 	return " "
+}
+
+// CPU sends the icon when the app is running.
+func CPU(emoji bool) string {
+	if emoji {
+		return encodeEmoji("00001F4BB")
+	}
+	return "︁ "
 }

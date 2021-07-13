@@ -6,7 +6,7 @@ import (
 )
 
 func TestVolumeText(t *testing.T) {
-	vol, err := VolumeText()
+	vol, err := Volume(false)
 	if err != nil {
 		t.Error(err)
 	}

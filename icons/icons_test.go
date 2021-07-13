@@ -24,14 +24,6 @@ func TestRedshift(t *testing.T) {
 	fmt.Println(rs, err)
 }
 
-func TestVolume(t *testing.T) {
-	vi, err := Volume(false)
-	if err != nil {
-		t.Error(err)
-	}
-	fmt.Println(vi)
-}
-
 func TestSyncthing(t *testing.T) {
 	sync, err := Syncthing(false)
 	if err != nil {

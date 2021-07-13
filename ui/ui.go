@@ -18,14 +18,14 @@ func Dwm(status string) error {
 //
 // For tmux:
 // Add the following to your tmux config:
-// set -g status-right "#($HOME/PATHTO/go-status)"
-// where `go-status` is the compiled binary
+// set -g status-right "#($HOME/PATH/TO/breto)"
+// where `breto` is the compiled binary
 //
 // For i3wm:
 // Make sure to update the `bar {}` section in your i3wm
 // config file to the following:
-// status_command $HOME/PATH/TO/go-status
-// where `go-status` is the compiled binary
+// status_command $HOME/PATH/TO/breto
+// where `breto` is the compiled binary
 //
 // For Polybar:
 // [module/breto]

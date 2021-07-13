@@ -3,6 +3,7 @@ package format
 import (
 	"flag"
 	"fmt"
+	"log"
 
 	"git.swab.dev/breto.git/blocks"
 	"git.swab.dev/breto.git/icons"
@@ -11,20 +12,26 @@ import (
 
 // CLI flag variables
 type Options struct {
-	Dwm, Battery, Clock, Audio, Memory, DiskSpace, Temperature, Tray, Emoji bool
+	Dwm, Battery, Clock, Audio, CPU, Memory, DiskSpace, Temperature, Tray, Emoji, DynamicVol bool
 }
 
 func (o *Options) ParseFlags() *Options {
 	// Setup and define cli flags
-	flag.BoolVar(&o.Dwm, "dwm", false, "Used to enable output for DWM's status bar.\n Example: --dwm=true")
-	flag.BoolVar(&o.Battery, "battery", false, "Used to enable battery module.\n Example: --battery=true")
 	flag.BoolVar(&o.Clock, "dateTime", true, "Used to disable the date and time module.\n Example: --dateTime=false")
-	flag.BoolVar(&o.Audio, "volume", true, "Used to disable the volume module.\n Example: --volume=false")
+	flag.BoolVar(&o.Audio, "volume", true, "Used to disable the volume-text module.\n Example: --volume=false")
 	flag.BoolVar(&o.Memory, "ram", true, "Used to disable the RAM module.\n Example: --ram=false")
-	flag.BoolVar(&o.DiskSpace, "storage", true, "Used to disable the home directory storage module.\n Example: --storage=false")
-	flag.BoolVar(&o.Temperature, "temp", true, "Used to disable the temperature module.\n Example: --temp=false")
-	flag.BoolVar(&o.Tray, "tray", true, "Used to disable the custom tray module.\n Example: --tray=false")
+	flag.BoolVar(&o.CPU, "cpu", true, "Used to disable the CPU module.\n Example: --cpu=false")
+
+	// Flags disabled by default:
+	flag.BoolVar(&o.DiskSpace, "storage", false, "Used to enable the home directory storage module.\n Example: --storage=true")
+	flag.BoolVar(&o.Temperature, "temp", false, "Used to enable the temperature module.\n Example: --temp=true")
+	flag.BoolVar(&o.Tray, "tray", false, "Used to enable the custom tray module.\n Example: --tray=true")
 	flag.BoolVar(&o.Emoji, "emoji", false, "Used to enable Openmoji icons instead of Awesome Font.\n Example: --emoji=true")
+	flag.BoolVar(&o.Battery, "battery", false, "Used to enable battery module.\n Example: --battery=true")
+	flag.BoolVar(&o.DynamicVol, "volume-icon-only", false, "Used to enable the dynamic volume icon module. (This disables the volume text.)\n Example: --volume-icon-only=false")
+
+	// UI flags:
+	flag.BoolVar(&o.Dwm, "dwm", false, "Used to enable output for DWM's status bar.\n Example: --dwm=true")
 
 	flag.Parse()
 
@@ -35,6 +42,9 @@ func (o *Options) Output(status string, info *stats.Info, ico *icons.Symbols, ba
 	if o.Temperature {
 		status = fmt.Sprintf("%s %s%s ", status, icons.Temp(o.Emoji), info.Weather)
 	}
+	if o.CPU {
+		status = fmt.Sprintf("%s %s%s %s ", status, icons.CPU(o.Emoji), info.CPUMHz, info.CPUTemp)
+	}
 	if o.DiskSpace {
 		status = fmt.Sprintf("%s %s%s ", status, icons.Dir(o.Emoji), info.HomeSpace)
 	}
@@ -42,12 +52,19 @@ func (o *Options) Output(status string, info *stats.Info, ico *icons.Symbols, ba
 		status = fmt.Sprintf("%s %s%s ", status, icons.Mem(o.Emoji), info.RamFree)
 	}
 	if o.Audio {
-		info.VolText, _ = blocks.VolumeText()
-		ico.VolIcon, _ = icons.Volume(o.Emoji)
-		status = fmt.Sprintf("%s %s%s ", status, ico.VolIcon, info.VolText)
+		info.VolText, _ = blocks.Volume(o.Emoji)
+		volumeIcon := icons.VolumeSingleIcon(o.Emoji)
+		var err error
+		if o.DynamicVol {
+			volumeIcon, err = icons.VolumeDynamic(o.Emoji)
+			if err != nil {
+				log.Printf("dynamic volume icon encountered an error: %s\n", err)
+			}
+		}
+		status = fmt.Sprintf("%s %s%s ", status, volumeIcon, info.VolText)
 	}
 	if o.Battery {
-		if bat.FiveMins == 0 || bat.Passed < 10 {
+		if bat.Minute == 0 || bat.Passed < 10 {
 			info.Power, _ = blocks.Battery()
 		}
 		status = fmt.Sprintf("%s %s%s ", status, icons.Power(o.Emoji), info.Power)
